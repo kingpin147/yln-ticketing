@@ -69,67 +69,79 @@ export function KanbanBoard({ initialTickets }: KanbanBoardProps) {
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
-            <div className="flex gap-6 overflow-x-auto pb-8 min-h-[calc(100vh-250px)]">
-                {COLUMNS.map((column) => (
-                    <div key={column.id} className="flex flex-col w-80 shrink-0 gap-4">
-                        <div className="flex items-center justify-between px-2">
-                            <h3 className="font-bold text-sm uppercase tracking-[0.15em] text-muted-foreground">
-                                {column.title}
-                                <Badge variant="secondary" className="ml-2 rounded-full font-bold">
-                                    {tickets.filter((t) => t.status === column.id).length}
-                                </Badge>
-                            </h3>
-                        </div>
+            <div className="flex gap-6 overflow-x-auto pb-8 px-2">
+                {COLUMNS.map((column) => {
+                    const columnTickets = tickets.filter((t) => t.status === column.id);
+                    const columnCount = columnTickets.length;
 
-                        <Droppable droppableId={column.id}>
-                            {(provided, snapshot) => (
-                                <div
-                                    {...provided.droppableProps}
-                                    ref={provided.innerRef}
-                                    className={`flex flex-col gap-4 p-2 rounded-3xl min-h-[200px] transition-colors ${snapshot.isDraggingOver ? "bg-primary/5 border-2 border-dashed border-primary/20" : "bg-zinc-50/50"
-                                        }`}
-                                >
-                                    {tickets
-                                        .filter((t) => t.status === column.id)
-                                        .map((ticket, index) => (
+                    return (
+                        <div key={column.id} className="flex flex-col w-[340px] shrink-0">
+                            {/* Column Header */}
+                            <div className="mb-4 px-4 py-3 bg-zinc-900 rounded-2xl shadow-sm">
+                                <div className="flex items-center justify-between">
+                                    <h3 className="font-black text-sm uppercase tracking-[0.15em] text-white">
+                                        {column.title}
+                                    </h3>
+                                    <Badge variant="secondary" className="rounded-full font-black text-xs bg-white/10 text-white border-none">
+                                        {columnCount}
+                                    </Badge>
+                                </div>
+                            </div>
+
+                            <Droppable droppableId={column.id}>
+                                {(provided, snapshot) => (
+                                    <div
+                                        {...provided.droppableProps}
+                                        ref={provided.innerRef}
+                                        className={`flex flex-col gap-3 p-4 rounded-2xl min-h-[500px] transition-all ${snapshot.isDraggingOver
+                                                ? "bg-primary/5 border-2 border-dashed border-primary/30 shadow-inner"
+                                                : "bg-white border-2 border-zinc-100"
+                                            }`}
+                                    >
+                                        {columnTickets.map((ticket, index) => (
                                             <Draggable key={ticket.id} draggableId={ticket.id} index={index}>
                                                 {(provided, snapshot) => (
                                                     <div
                                                         ref={provided.innerRef}
                                                         {...provided.draggableProps}
                                                         {...provided.dragHandleProps}
-                                                        className={`animate-in fade-in slide-in-from-top-2 duration-300 ${snapshot.isDragging ? "z-50" : ""
+                                                        className={`animate-in fade-in slide-in-from-top-2 duration-300 ${snapshot.isDragging ? "z-50 rotate-2" : ""
                                                             }`}
                                                     >
-                                                        <Card className={`rounded-2xl border-zinc-200 overflow-hidden hover:shadow-md transition-shadow cursor-grab active:cursor-grabbing ${snapshot.isDragging ? "shadow-xl ring-2 ring-primary/20 bg-white" : "bg-card"
+                                                        <Card className={`rounded-2xl border-zinc-200 overflow-hidden hover:shadow-lg transition-all cursor-grab active:cursor-grabbing ${snapshot.isDragging
+                                                                ? "shadow-2xl ring-4 ring-primary/20 bg-white scale-105"
+                                                                : "bg-white shadow-sm hover:border-zinc-300"
                                                             }`}>
-                                                            <CardHeader className="p-4 pb-2">
+                                                            <CardHeader className="p-4 pb-3 bg-zinc-50/50">
                                                                 <div className="flex items-center justify-between mb-2">
-                                                                    <span className="text-[10px] font-bold font-mono text-primary bg-primary/5 px-1.5 py-0.5 rounded">
+                                                                    <span className="text-[10px] font-black font-mono text-primary bg-primary/10 px-2 py-1 rounded-lg">
                                                                         {ticket.ticketId}
                                                                     </span>
-                                                                    <Badge variant="outline" className={`rounded-full border-none text-[9px] font-bold px-2 py-0 ${ticket.priority === "URGENT" ? "bg-red-100 text-red-700" :
-                                                                        ticket.priority === "HIGH" ? "bg-orange-100 text-orange-700" :
-                                                                            ticket.priority === "MEDIUM" ? "bg-blue-100 text-blue-700" :
-                                                                                "bg-zinc-100 text-zinc-700"
-                                                                        }`}>
+                                                                    <Badge
+                                                                        variant="outline"
+                                                                        className={`rounded-full border-none text-[9px] font-black px-2.5 py-0.5 ${ticket.priority === "URGENT" ? "bg-rose-500 text-white" :
+                                                                                ticket.priority === "HIGH" ? "bg-orange-500 text-white" :
+                                                                                    ticket.priority === "MEDIUM" ? "bg-blue-500 text-white" :
+                                                                                        "bg-zinc-400 text-white"
+                                                                            }`}
+                                                                    >
                                                                         {ticket.priority}
                                                                     </Badge>
                                                                 </div>
-                                                                <Link href={`/tickets/${ticket.id}`} className="hover:underline">
-                                                                    <CardTitle className="text-sm font-bold leading-tight line-clamp-2">
+                                                                <Link href={`/tickets/${ticket.id}`} className="group">
+                                                                    <CardTitle className="text-sm font-bold leading-tight line-clamp-2 group-hover:text-primary transition-colors">
                                                                         {ticket.title}
                                                                     </CardTitle>
                                                                 </Link>
                                                             </CardHeader>
-                                                            <CardContent className="p-4 pt-2 space-y-3">
+                                                            <CardContent className="p-4 pt-3 space-y-2 bg-white">
                                                                 <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-                                                                    <User className="w-3 h-3" />
-                                                                    <span className="truncate">{ticket.submittedBy.name || "Unknown"}</span>
+                                                                    <User className="w-3.5 h-3.5 text-zinc-400" />
+                                                                    <span className="truncate font-medium">{ticket.submittedBy.name || "Unknown"}</span>
                                                                 </div>
                                                                 <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-                                                                    <Tag className="w-3 h-3" />
-                                                                    <span className="truncate">{ticket.department || "General"}</span>
+                                                                    <Tag className="w-3.5 h-3.5 text-zinc-400" />
+                                                                    <span className="truncate font-medium">{ticket.department || "General"}</span>
                                                                 </div>
                                                             </CardContent>
                                                         </Card>
@@ -137,12 +149,20 @@ export function KanbanBoard({ initialTickets }: KanbanBoardProps) {
                                                 )}
                                             </Draggable>
                                         ))}
-                                    {provided.placeholder}
-                                </div>
-                            )}
-                        </Droppable>
-                    </div>
-                ))}
+                                        {provided.placeholder}
+
+                                        {columnTickets.length === 0 && (
+                                            <div className="flex flex-col items-center justify-center py-12 text-center">
+                                                <AlertCircle className="w-8 h-8 text-zinc-300 mb-2" />
+                                                <p className="text-xs text-muted-foreground font-medium">No tickets here</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </Droppable>
+                        </div>
+                    );
+                })}
             </div>
         </DragDropContext>
     );
