@@ -106,6 +106,10 @@ export async function getDashboardTickets(search?: string) {
 
     return prisma.ticket.findMany({
         where,
+        include: {
+            submittedBy: true,
+            assignedTo: true,
+        },
         orderBy: { createdAt: "desc" },
     });
 }
@@ -259,6 +263,10 @@ export async function getUnassignedTickets() {
 
     return prisma.ticket.findMany({
         where: { assignedToId: null },
+        include: {
+            submittedBy: true,
+            assignedTo: true,
+        },
         orderBy: { createdAt: "desc" },
     });
 }
@@ -275,6 +283,10 @@ export async function getMyAssignedTickets() {
 
     return prisma.ticket.findMany({
         where: { assignedToId: dbUser.id },
+        include: {
+            submittedBy: true,
+            assignedTo: true,
+        },
         orderBy: { createdAt: "desc" },
     });
 }

@@ -17,10 +17,10 @@ A premium, enterprise-grade internal ticketing solution built with **Next.js 15*
 - **Submitter**: Simplified portal for tracking personal issues only.
 
 ### 📊 Intelligence & Management
-- **User Provisioning**: Directly add new members via the **"Add Member"** dashboard action. Instantly creates Clerk and Database profiles.
+- **User Provisioning**: Directly add new members via a polished, role-aware dashboard modal. Instantly creates Clerk and Database profiles.
 - **Activity Log**: Every status change, assignment, and update is tracked in a permanent audit trail.
 - **Internal Notes**: Private staff-only discussion threads for team collaboration.
-- **Excel Export**: Instant `.xlsx` data generation for advanced reporting.
+- **Excel Export**: Robust `.xlsx` generation with full requester/agent details and safe date formatting.
 - **Email Automation**: Real-time notifications for ticket creation and status updates via **Resend**.
 
 ## 💻 Tech Stack

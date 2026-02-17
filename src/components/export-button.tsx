@@ -5,6 +5,7 @@ import { Download } from "lucide-react";
 import * as XLSX from "xlsx";
 import { toast } from "sonner";
 import { useState } from "react";
+import { format } from "date-fns";
 
 export function ExportButton({ data, filename = "tickets_report.xlsx" }: { data: any[], filename?: string }) {
     const [loading, setLoading] = useState(false);
@@ -17,17 +18,28 @@ export function ExportButton({ data, filename = "tickets_report.xlsx" }: { data:
                 return;
             }
 
-            // Flatten data for Excel if needed
-            const exportData = data.map(item => ({
-                "Ticket ID": item.ticketId,
-                "Title": item.title,
-                "Status": item.status,
-                "Priority": item.priority,
-                "Submitted By": item.submittedBy?.name || "Unknown",
-                "Submitted On": new Date(item.createdAt).toLocaleDateString(),
-                "Assigned To": item.assignedTo?.name || "Unassigned",
-                "Department": item.department || "General",
-            }));
+            // Flatten data for Excel with safety checks
+            const exportData = data.map(item => {
+                let formattedDate = "N/A";
+                try {
+                    if (item.createdAt) {
+                        formattedDate = format(new Date(item.createdAt), "yyyy-MM-dd HH:mm");
+                    }
+                } catch (e) {
+                    console.error("Date formatting failed for item:", item.id, e);
+                }
+
+                return {
+                    "Ticket ID": item.ticketId || "N/A",
+                    "Title": item.title || "Untitled",
+                    "Status": item.status || "NEW",
+                    "Priority": item.priority || "MEDIUM",
+                    "Requester": item.submittedBy?.name || "Unknown",
+                    "Assigned Agent": item.assignedTo?.name || "Unassigned",
+                    "Department": item.department || "General",
+                    "Created At": formattedDate,
+                };
+            });
 
             const worksheet = XLSX.utils.json_to_sheet(exportData);
             const workbook = XLSX.utils.book_new();
