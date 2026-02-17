@@ -11,12 +11,13 @@ A premium, enterprise-grade internal ticketing solution built with **Next.js 15*
 - **Global Search**: Real-time, debounced search across all ticket attributes.
 
 ### 🛡️ Advanced RBAC (Role-Based Access Control)
-- **Super Admin**: Full platform control, user management, and core data deletion. Sees all tickets.
-- **Sub Admin**: Team management and assignment capabilities. Sees all tickets.
+- **Super Admin**: Full platform control. Can add users of any role, manage all members, and perform core data deletion.
+- **Sub Admin**: Team management and assignment capabilities. Can add **Agents** and **Regular Users** to the platform.
 - **Agent**: Dedicated workspace focusing on **assigned tickets only** for maximum focus.
 - **Submitter**: Simplified portal for tracking personal issues only.
 
-### 📊 Intelligence & Audit
+### 📊 Intelligence & Management
+- **User Provisioning**: Directly add new members via the **"Add Member"** dashboard action. Instantly creates Clerk and Database profiles.
 - **Activity Log**: Every status change, assignment, and update is tracked in a permanent audit trail.
 - **Internal Notes**: Private staff-only discussion threads for team collaboration.
 - **Excel Export**: Instant `.xlsx` data generation for advanced reporting.
@@ -44,6 +45,9 @@ A premium, enterprise-grade internal ticketing solution built with **Next.js 15*
    CLERK_SECRET_KEY=your_key
    DATABASE_URL=your_neon_url
    RESEND_API_KEY=your_resend_key
+
+   # (Optional) Comma-separated list of emails to auto-grant Super Admin on signup
+   ADMIN_EMAILS=admin@example.com,owner@yourdomain.com
    ```
 
 3. **Initialize Database**
@@ -60,5 +64,3 @@ A premium, enterprise-grade internal ticketing solution built with **Next.js 15*
 ## 🚢 Deployment (Vercel)
 The project is optimized for Vercel. Ensure you add the environment variables listed above to your Vercel project settings. The `package.json` includes a `postinstall` script to handle Prisma client generation in the cloud.
 
----
-*Built with ❤️ for YLN Internal Operations.*

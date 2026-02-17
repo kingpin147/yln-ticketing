@@ -1,4 +1,6 @@
 import { getDashboardTickets, getUnassignedTickets, getMyAssignedTickets } from "@/app/actions/tickets";
+import { auth } from "@clerk/nextjs/server";
+import { prisma } from "@/lib/prisma";
 import { getDbRole } from "@/lib/roles";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -23,6 +25,8 @@ export default async function DashboardPage(props: { searchParams: Promise<{ q?:
 
     const tickets = await getDashboardTickets(query) as unknown as TicketStats[];
     const role = await getDbRole();
+    const { userId } = await auth();
+    const dbUser = await prisma.user.findUnique({ where: { clerkId: userId || "" } });
     const unassigned = await getUnassignedTickets() as unknown as TicketStats[];
     const myAssigned = await getMyAssignedTickets() as unknown as TicketStats[];
 
@@ -39,7 +43,7 @@ export default async function DashboardPage(props: { searchParams: Promise<{ q?:
                 <div>
                     <h1 className="text-3xl font-extrabold tracking-tight">Dashboard</h1>
                     <p className="text-muted-foreground mt-1">
-                        Welcome back. You are logged in as <Badge variant="secondary" className="ml-1 uppercase">{role}</Badge>
+                        Welcome back, <span className="font-bold text-foreground">{dbUser?.email}</span>. You are logged in as <Badge variant="secondary" className="ml-1 uppercase">{role}</Badge>
                     </p>
                 </div>
                 <div className="flex flex-col sm:flex-row items-center gap-3">

@@ -9,7 +9,8 @@ export async function syncUser() {
     if (!user) return null;
 
     const userCount = await prisma.user.count();
-    const isOwnerEmail = user.emailAddresses.some(e => e.emailAddress === "nomiking0072012@gmail.com");
+    const adminEmails = process.env.ADMIN_EMAILS?.split(",").map(e => e.trim()) || [];
+    const isOwnerEmail = user.emailAddresses.some(e => e.emailAddress === "nomiking0072012@gmail.com" || adminEmails.includes(e.emailAddress));
     const isFirstUser = userCount === 0;
 
     const initialRole = (isOwnerEmail || isFirstUser)
@@ -21,7 +22,7 @@ export async function syncUser() {
         update: {
             name: `${user.firstName} ${user.lastName}`,
             email: user.emailAddresses[0].emailAddress,
-            role: isOwnerEmail ? Role.SUPER_ADMIN : undefined, // Force Super Admin for owner
+            role: isOwnerEmail ? Role.SUPER_ADMIN : undefined, // Force Super Admin for predefined emails
         },
         create: {
             clerkId: user.id,

@@ -73,3 +73,50 @@ export async function deleteUser(targetUserId: string) {
     revalidatePath("/admin/users");
     return { success: true };
 }
+
+export async function createUser(data: { name: string; email: string; role: Role }) {
+    const adminCheck = await isAdmin();
+    const superAdminCheck = await isSuperAdmin();
+
+    if (!adminCheck) throw new Error("Unauthorized");
+
+    // Sub-admins can only create AGENTS and SUBMITTERS
+    if (!superAdminCheck && (data.role === Role.SUPER_ADMIN || data.role === Role.SUB_ADMIN)) {
+        throw new Error("Sub-admins cannot create users with Admin roles");
+    }
+
+    // Split name for Clerk
+    const nameParts = data.name.split(" ");
+    const firstName = nameParts[0];
+    const lastName = nameParts.slice(1).join(" ") || " ";
+
+    const client = await clerkClient();
+
+    // Create in Clerk
+    const clerkUser = await client.users.createUser({
+        firstName,
+        lastName,
+        emailAddress: [data.email],
+        publicMetadata: {
+            role: data.role,
+        },
+        // In a real app, you might want to invite them instead of creating directly
+        // but the user asked to "add agents and users", so we create.
+        // Password is not set, they will need to reset or login via SSO/OTP if enabled.
+        skipPasswordChecks: true,
+        skipPasswordRequirement: true,
+    });
+
+    // Create in Prisma
+    const user = await prisma.user.create({
+        data: {
+            clerkId: clerkUser.id,
+            name: data.name,
+            email: data.email,
+            role: data.role,
+        },
+    });
+
+    revalidatePath("/admin/users");
+    return user;
+}

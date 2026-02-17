@@ -101,7 +101,7 @@ export default async function MyTicketsPage(props: { searchParams: Promise<{ q?:
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="text-muted-foreground text-sm py-4">
-                                        {format(new Date(ticket.createdAt), "MMM d, yyyy")}
+                                        {ticket.createdAt ? format(new Date(ticket.createdAt), "MMM d, yyyy") : "N/A"}
                                     </TableCell>
                                 </TableRow>
                             ))

@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { RoleSwitcher } from "@/components/role-switcher";
+import { AddUserModal } from "@/components/add-user-modal";
 import { Role } from "@/lib/constants";
 import { Users, Shield, UserCog, Mail, Calendar, Trash2 } from "lucide-react";
 import { format } from "date-fns";
@@ -39,10 +40,13 @@ export default async function AdminUsersPage() {
                     <h1 className="text-3xl font-extrabold tracking-tight">User Management</h1>
                     <p className="text-muted-foreground mt-1">Manage platform members, roles, and administrative access.</p>
                 </div>
-                <Badge variant="outline" className="rounded-full px-4 py-1 gap-2 border-primary/20 bg-primary/5 text-primary">
-                    <Shield className="w-3 h-3" />
-                    {role.replace("_", " ")}
-                </Badge>
+                <div className="flex items-center gap-3">
+                    <AddUserModal canManageAdmins={superAdmin} />
+                    <Badge variant="outline" className="rounded-full px-4 py-1 gap-2 border-primary/20 bg-primary/5 text-primary">
+                        <Shield className="w-3 h-3" />
+                        {role.replace("_", " ")}
+                    </Badge>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -107,7 +111,7 @@ export default async function AdminUsersPage() {
                                 <TableCell className="py-4 text-[11px] font-medium text-muted-foreground">
                                     <span className="flex items-center gap-1">
                                         <Calendar className="w-3 h-3" />
-                                        {format(new Date(user.createdAt), "MMM d, yyyy")}
+                                        {user.createdAt ? format(new Date(user.createdAt), "MMM d, yyyy") : "N/A"}
                                     </span>
                                 </TableCell>
                                 {superAdmin && (

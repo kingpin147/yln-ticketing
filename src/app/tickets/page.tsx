@@ -113,7 +113,7 @@ export default async function TicketsPage(props: { searchParams: Promise<{ q?: s
                                         {ticket.submittedBy?.name || "Unknown"}
                                     </TableCell>
                                     <TableCell className="text-right pr-6 text-muted-foreground text-sm py-4">
-                                        {format(new Date(ticket.createdAt), "MMM d, HH:mm")}
+                                        {ticket.createdAt ? format(new Date(ticket.createdAt), "MMM d, HH:mm") : "N/A"}
                                     </TableCell>
                                 </TableRow>
                             ))
