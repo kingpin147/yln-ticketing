@@ -242,5 +242,6 @@ export default async function TicketDetailPage({ params }: { params: Promise<{ i
                     </div>
                 </div>
             </div>
-            );
+        </div>
+    );
 }

@@ -27,23 +27,23 @@ export function TicketFilters() {
     };
 
     return (
-        <div className="flex flex-wrap items-center gap-2">
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-zinc-100 rounded-full text-[10px] font-black uppercase tracking-widest text-zinc-500 mr-2 border border-zinc-200/50">
-                <Filter className="w-3 h-3" />
-                Quick Filters
+        <div className="flex flex-wrap items-center gap-3">
+            <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900 rounded-full text-[10px] font-black uppercase tracking-[0.15em] text-white shadow-sm">
+                <Filter className="w-3.5 h-3.5" />
+                Filters
             </div>
 
             <Select
                 defaultValue={searchParams.get("status") || "ALL"}
                 onValueChange={(v) => updateFilter("status", v)}
             >
-                <SelectTrigger className="w-[130px] h-10 rounded-full text-[10px] font-bold uppercase tracking-tight bg-white border-zinc-200 shadow-sm transition-all focus:ring-primary/20">
+                <SelectTrigger className="w-[140px] h-11 rounded-full text-[11px] font-bold uppercase tracking-tight bg-white border-zinc-200 shadow-sm hover:shadow-md transition-all focus:ring-2 focus:ring-primary/20">
                     <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent className="rounded-2xl border-none shadow-2xl p-2 bg-white">
-                    <SelectItem value="ALL" className="rounded-xl font-bold py-2">Any Status</SelectItem>
+                    <SelectItem value="ALL" className="rounded-xl font-bold py-2.5 text-xs">All Status</SelectItem>
                     {Object.values(Status).map((status) => (
-                        <SelectItem key={status} value={status} className="rounded-xl font-bold py-2">
+                        <SelectItem key={status} value={status} className="rounded-xl font-bold py-2.5 text-xs">
                             {status.replace("_", " ")}
                         </SelectItem>
                     ))}
@@ -54,13 +54,13 @@ export function TicketFilters() {
                 defaultValue={searchParams.get("priority") || "ALL"}
                 onValueChange={(v) => updateFilter("priority", v)}
             >
-                <SelectTrigger className="w-[130px] h-10 rounded-full text-[10px] font-bold uppercase tracking-tight bg-white border-zinc-200 shadow-sm transition-all focus:ring-primary/20">
+                <SelectTrigger className="w-[140px] h-11 rounded-full text-[11px] font-bold uppercase tracking-tight bg-white border-zinc-200 shadow-sm hover:shadow-md transition-all focus:ring-2 focus:ring-primary/20">
                     <SelectValue placeholder="Priority" />
                 </SelectTrigger>
                 <SelectContent className="rounded-2xl border-none shadow-2xl p-2 bg-white">
-                    <SelectItem value="ALL" className="rounded-xl font-bold py-2">Any Priority</SelectItem>
+                    <SelectItem value="ALL" className="rounded-xl font-bold py-2.5 text-xs">All Priority</SelectItem>
                     {Object.values(Priority).map((priority) => (
-                        <SelectItem key={priority} value={priority} className="rounded-xl font-bold py-2">
+                        <SelectItem key={priority} value={priority} className="rounded-xl font-bold py-2.5 text-xs">
                             {priority}
                         </SelectItem>
                     ))}
