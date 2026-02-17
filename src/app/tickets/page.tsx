@@ -19,6 +19,8 @@ import { Role, Status, Priority } from "@/lib/constants";
 import { ExportButton } from "@/components/export-button";
 import { redirect } from "next/navigation";
 
+import { TicketFilters } from "@/components/ticket-filters";
+
 interface TicketItem {
     id: string;
     ticketId: string;
@@ -30,9 +32,20 @@ interface TicketItem {
     assignedTo: { name: string | null } | null;
 }
 
-export default async function TicketsPage(props: { searchParams: Promise<{ q?: string }> }) {
+export default async function TicketsPage(props: {
+    searchParams: Promise<{
+        q?: string;
+        status?: Status;
+        priority?: Priority;
+        department?: string;
+    }>
+}) {
     const searchParams = await props.searchParams;
     const query = searchParams.q;
+    const status = searchParams.status;
+    const priority = searchParams.priority;
+    const department = searchParams.department;
+
     const role = await getDbRole();
 
     // Staff only page
@@ -41,86 +54,118 @@ export default async function TicketsPage(props: { searchParams: Promise<{ q?: s
     }
 
     // Admins see all, Agents see assigned (handled by getDashboardTickets logic)
-    const tickets = await getDashboardTickets(query) as unknown as TicketItem[];
+    const tickets = await getDashboardTickets({
+        search: query,
+        status,
+        priority,
+        department
+    }) as unknown as TicketItem[];
 
     return (
-        <div className="container py-10 px-4 mx-auto space-y-8 animate-in fade-in duration-500">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <h1 className="text-3xl font-extrabold tracking-tight">Global Tickets</h1>
-                    <p className="text-muted-foreground mt-1">Manage all support requests in the system.</p>
-                </div>
-                <div className="flex flex-col sm:flex-row items-center gap-3">
-                    <SearchInput placeholder="Search ID or title..." />
-                    <ExportButton data={tickets} />
-                    <Link href="/tickets/kanban">
-                        <Button variant="outline" size="sm" className="rounded-full gap-2">
-                            <LayoutGrid className="w-4 h-4" />
-                            Kanban board
-                        </Button>
-                    </Link>
+        <div className="min-h-screen bg-zinc-50/50 pb-20 animate-in fade-in duration-700">
+            {/* Premium Header Section */}
+            <div className="bg-zinc-900 text-white pt-16 pb-24 px-4 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] -mr-64 -mt-64 animate-pulse" />
+                <div className="container mx-auto relative z-10">
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+                        <div className="space-y-4">
+                            <Badge variant="outline" className="border-white/10 bg-white/5 text-primary-foreground/80 rounded-full px-4 py-1 text-[10px] uppercase font-black tracking-[0.2em]">
+                                Administration
+                            </Badge>
+                            <h1 className="text-5xl md:text-6xl font-black tracking-tighter leading-tight italic">
+                                Global Tickets
+                            </h1>
+                            <p className="text-zinc-400 text-lg font-medium max-w-xl leading-relaxed">
+                                Manage and monitor all <span className="text-white font-bold">active support requests</span>.
+                                High-efficiency central monitoring for staff.
+                            </p>
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-4">
+                            <TicketFilters />
+                            <SearchInput placeholder="Search ID or title..." className="bg-white/5 border-white/10 text-white placeholder:text-zinc-500 h-14 rounded-2xl w-full md:w-[350px] focus:bg-white focus:text-black transition-all" />
+                            <div className="flex items-center gap-2">
+                                <ExportButton data={tickets} />
+                                <Link href="/tickets/kanban">
+                                    <Button variant="outline" className="rounded-full border-white/10 bg-white/5 hover:bg-white hover:text-black text-white h-14 px-8 font-black transition-all tracking-tight uppercase text-xs">
+                                        <LayoutGrid className="w-4 h-4 mr-2" />
+                                        Kanban board
+                                    </Button>
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <Card className="rounded-3xl overflow-hidden border-zinc-200 shadow-sm">
-                <Table>
-                    <TableHeader className="bg-zinc-50/50">
-                        <TableRow className="hover:bg-transparent border-zinc-100">
-                            <TableHead className="w-[120px] font-bold uppercase text-[11px] tracking-wider py-4">ID</TableHead>
-                            <TableHead className="font-bold uppercase text-[11px] tracking-wider py-4">Title</TableHead>
-                            <TableHead className="font-bold uppercase text-[11px] tracking-wider py-4">Status</TableHead>
-                            <TableHead className="font-bold uppercase text-[11px] tracking-wider py-4">Priority</TableHead>
-                            <TableHead className="font-bold uppercase text-[11px] tracking-wider py-4">Requester</TableHead>
-                            <TableHead className="font-bold uppercase text-[11px] tracking-wider py-4 text-right pr-6">Submitted</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {tickets.length === 0 ? (
-                            <TableRow>
-                                <TableCell colSpan={6} className="h-48 text-center text-muted-foreground">
-                                    <p className="font-medium">No tickets matching your search.</p>
-                                </TableCell>
+            <div className="container mx-auto px-4 -mt-12 relative z-20">
+                <Card className="rounded-[2.5rem] overflow-hidden border-none shadow-2xl bg-white">
+                    <Table>
+                        <TableHeader className="bg-zinc-900">
+                            <TableRow className="hover:bg-transparent border-none h-16">
+                                <TableHead className="w-[140px] font-black uppercase text-[10px] tracking-[0.15em] pl-10 text-zinc-400 italic">ID Code</TableHead>
+                                <TableHead className="font-black uppercase text-[10px] tracking-[0.15em] text-zinc-400 italic">Title & Subject</TableHead>
+                                <TableHead className="font-black uppercase text-[10px] tracking-[0.15em] text-zinc-400 italic">Lifecycle</TableHead>
+                                <TableHead className="font-black uppercase text-[10px] tracking-[0.15em] text-zinc-400 italic">Priority</TableHead>
+                                <TableHead className="font-black uppercase text-[10px] tracking-[0.15em] text-zinc-400 italic">Requester</TableHead>
+                                <TableHead className="font-black uppercase text-[10px] tracking-[0.15em] text-zinc-400 italic text-right pr-10">Timestamp</TableHead>
                             </TableRow>
-                        ) : (
-                            tickets.map((ticket) => (
-                                <TableRow key={ticket.id} className="hover:bg-zinc-50/50 transition-colors cursor-pointer border-zinc-100 group">
-                                    <TableCell className="font-mono font-bold text-primary py-4">
-                                        <Link href={`/tickets/${ticket.id}`} className="block">
-                                            {ticket.ticketId}
-                                        </Link>
-                                    </TableCell>
-                                    <TableCell className="font-semibold py-4">
-                                        <Link href={`/tickets/${ticket.id}`} className="block truncate max-w-[250px]">
-                                            {ticket.title}
-                                        </Link>
-                                    </TableCell>
-                                    <TableCell className="py-4">
-                                        <Badge variant={ticket.status === "RESOLVED" || ticket.status === "CLOSED" ? "outline" : "default"}
-                                            className="rounded-full px-3 py-0.5 text-[10px] font-bold">
-                                            {ticket.status}
-                                        </Badge>
-                                    </TableCell>
-                                    <TableCell className="py-4">
-                                        <Badge variant="outline" className={`rounded-full px-3 py-0.5 text-[10px] font-bold border-none ${ticket.priority === "URGENT" ? "bg-red-100 text-red-700" :
-                                            ticket.priority === "HIGH" ? "bg-orange-100 text-orange-700" :
-                                                ticket.priority === "MEDIUM" ? "bg-blue-100 text-blue-700" :
-                                                    "bg-zinc-200 text-zinc-700"
-                                            }`}>
-                                            {ticket.priority}
-                                        </Badge>
-                                    </TableCell>
-                                    <TableCell className="py-4 text-sm font-medium">
-                                        {ticket.submittedBy?.name || "Unknown"}
-                                    </TableCell>
-                                    <TableCell className="text-right pr-6 text-muted-foreground text-sm py-4">
-                                        {ticket.createdAt ? format(new Date(ticket.createdAt), "MMM d, HH:mm") : "N/A"}
+                        </TableHeader>
+                        <TableBody>
+                            {tickets.length === 0 ? (
+                                <TableRow>
+                                    <TableCell colSpan={6} className="h-64 text-center">
+                                        <div className="flex flex-col items-center gap-3">
+                                            <div className="w-16 h-16 bg-zinc-50 rounded-2xl flex items-center justify-center">
+                                                <PlusCircle className="w-6 h-6 text-zinc-300" />
+                                            </div>
+                                            <p className="font-black uppercase tracking-widest text-xs text-zinc-400">No data records found</p>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
-                            ))
-                        )}
-                    </TableBody>
-                </Table>
-            </Card>
+                            ) : (
+                                tickets.map((ticket) => (
+                                    <TableRow key={ticket.id} className="hover:bg-zinc-50 transition-colors border-zinc-100 group h-20">
+                                        <TableCell className="pl-10">
+                                            <Link href={`/tickets/${ticket.id}`} className="block">
+                                                <span className="font-black text-xs text-zinc-400 group-hover:text-primary transition-colors italic tracking-widest">{ticket.ticketId}</span>
+                                            </Link>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Link href={`/tickets/${ticket.id}`} className="block">
+                                                <span className="font-black text-sm text-zinc-800 tracking-tight block truncate max-w-[300px] group-hover:translate-x-1 transition-transform">{ticket.title}</span>
+                                            </Link>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Badge variant={ticket.status === "RESOLVED" || ticket.status === "CLOSED" ? "outline" : "default"}
+                                                className={`rounded-xl px-4 py-1 text-[10px] font-black uppercase tracking-wider h-8 shadow-sm ${ticket.status === "RESOLVED" || ticket.status === "CLOSED" ? "bg-emerald-50 text-emerald-700 border-emerald-100" : "bg-zinc-900"}`}>
+                                                {ticket.status}
+                                            </Badge>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Badge variant="outline" className={`rounded-full px-4 py-1 text-[9px] font-black border-none uppercase tracking-widest italic ${ticket.priority === "URGENT" ? "bg-rose-100 text-rose-700" :
+                                                ticket.priority === "HIGH" ? "bg-orange-100 text-orange-700" :
+                                                    ticket.priority === "MEDIUM" ? "bg-blue-100 text-blue-700" :
+                                                        "bg-zinc-200 text-zinc-700"
+                                                }`}>
+                                                {ticket.priority}
+                                            </Badge>
+                                        </TableCell>
+                                        <TableCell className="text-sm font-bold text-zinc-600">
+                                            {ticket.submittedBy?.name || "Unknown Profile"}
+                                        </TableCell>
+                                        <TableCell className="text-right pr-10">
+                                            <span className="text-zinc-400 font-black text-[10px] uppercase italic">
+                                                {ticket.createdAt ? format(new Date(ticket.createdAt), "MMM d, HH:mm") : "N/A"}
+                                            </span>
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            )}
+                        </TableBody>
+                    </Table>
+                </Card>
+            </div>
         </div>
     );
 }

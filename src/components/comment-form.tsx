@@ -31,27 +31,27 @@ export function CommentForm({ ticketId, isStaff }: { ticketId: string; isStaff: 
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
             <Textarea
                 placeholder="Write your response here..."
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
-                className="min-h-[120px] rounded-2xl border-zinc-200 focus-visible:ring-primary/20 resize-none p-4"
+                className="min-h-[160px] rounded-[2.5rem] border-zinc-200 focus-visible:ring-primary/10 resize-none p-8 font-medium bg-zinc-50/50 focus:bg-white transition-all text-zinc-800 placeholder:text-zinc-300 shadow-inner"
                 disabled={isPending}
             />
 
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-6 px-2">
                 {isStaff && (
-                    <div className="flex items-center space-x-2 bg-zinc-50 px-4 py-2 rounded-full border border-zinc-100">
+                    <div className={`flex items-center space-x-4 px-6 py-3 rounded-full border transition-all ${isPrivate ? "bg-orange-50 border-orange-100 text-orange-700 shadow-sm" : "bg-zinc-50 border-zinc-100 text-zinc-400"}`}>
                         <Lock className={`w-4 h-4 ${isPrivate ? "text-orange-600" : "text-zinc-400"}`} />
-                        <Label htmlFor="internal-note" className="text-xs font-bold uppercase tracking-wider cursor-pointer">
-                            Internal Note
+                        <Label htmlFor="internal-note" className="text-[10px] font-black uppercase tracking-[0.2em] cursor-pointer">
+                            Internal Visibility Only
                         </Label>
                         <Switch
                             id="internal-note"
                             checked={isPrivate}
                             onCheckedChange={setIsPrivate}
-                            className="data-[state=checked]:bg-orange-600"
+                            className="data-[state=checked]:bg-orange-600 scale-90"
                         />
                     </div>
                 )}
@@ -59,7 +59,7 @@ export function CommentForm({ ticketId, isStaff }: { ticketId: string; isStaff: 
                 <Button
                     type="submit"
                     disabled={isPending || !content.trim()}
-                    className="w-full sm:w-auto rounded-full px-8 font-bold gap-2"
+                    className="w-full sm:w-auto rounded-full h-14 px-10 font-black text-xs uppercase tracking-[0.15em] gap-3 shadow-xl shadow-zinc-200 transition-all hover:scale-[1.02] active:scale-[0.98] bg-zinc-900 hover:bg-zinc-800"
                 >
                     {isPending ? (
                         <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />

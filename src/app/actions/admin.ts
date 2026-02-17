@@ -6,11 +6,23 @@ import { revalidatePath } from "next/cache";
 import { Role } from "@/lib/constants";
 import { isSuperAdmin, isAdmin } from "@/lib/roles";
 
-export async function getAllUsers() {
+export async function getAllUsers(params?: { search?: string; role?: Role }) {
     const adminCheck = await isAdmin();
     if (!adminCheck) throw new Error("Unauthorized");
 
+    const where: any = {};
+    if (params?.search) {
+        where.OR = [
+            { name: { contains: params.search, mode: 'insensitive' } },
+            { email: { contains: params.search, mode: 'insensitive' } },
+        ];
+    }
+    if (params?.role && params.role !== "ALL" as any) {
+        where.role = params.role;
+    }
+
     return prisma.user.findMany({
+        where,
         orderBy: { name: 'asc' },
         include: {
             _count: {

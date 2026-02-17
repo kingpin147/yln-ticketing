@@ -14,7 +14,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { SearchInput } from "@/components/search-input";
-import { Status, Priority } from "@prisma/client";
+import { Status, Priority } from "@/lib/constants";
+
+import { TicketFilters } from "@/components/ticket-filters";
 
 interface TicketItem {
     id: string;
@@ -25,10 +27,26 @@ interface TicketItem {
     createdAt: Date | string;
 }
 
-export default async function MyTicketsPage(props: { searchParams: Promise<{ q?: string }> }) {
+export default async function MyTicketsPage(props: {
+    searchParams: Promise<{
+        q?: string;
+        status?: Status;
+        priority?: Priority;
+        department?: string;
+    }>
+}) {
     const searchParams = await props.searchParams;
     const query = searchParams.q;
-    const tickets = await getMyTickets(query) as unknown as TicketItem[];
+    const status = searchParams.status;
+    const priority = searchParams.priority;
+    const department = searchParams.department;
+
+    const tickets = await getMyTickets({
+        search: query,
+        status,
+        priority,
+        department
+    }) as unknown as TicketItem[];
 
     return (
         <div className="container py-10 px-4 mx-auto space-y-8 animate-in fade-in duration-500">
@@ -45,8 +63,9 @@ export default async function MyTicketsPage(props: { searchParams: Promise<{ q?:
                 </Link>
             </div>
 
-            <div className="flex items-center justify-between gap-4">
-                <SearchInput placeholder="Search by ID or title..." />
+            <div className="flex flex-wrap items-center justify-between gap-4 bg-zinc-50 p-6 rounded-3xl border border-zinc-100">
+                <TicketFilters />
+                <SearchInput placeholder="Search by ID or title..." className="w-full md:w-auto" />
             </div>
 
             <Card className="rounded-3xl overflow-hidden border-zinc-200 shadow-sm">

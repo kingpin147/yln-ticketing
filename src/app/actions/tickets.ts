@@ -79,7 +79,12 @@ export async function createTicket(formData: {
     return ticket;
 }
 
-export async function getDashboardTickets(search?: string) {
+export async function getDashboardTickets(params: {
+    search?: string;
+    status?: Status;
+    priority?: Priority;
+    department?: string;
+}) {
     const { userId } = await auth();
     if (!userId) return [];
 
@@ -95,14 +100,17 @@ export async function getDashboardTickets(search?: string) {
     } else if (dbUser.role === Role.SUBMITTER) {
         where.submittedById = dbUser.id;
     }
-    // SUPER_ADMIN and SUB_ADMIN see all (where remains empty)
 
-    if (search) {
+    if (params.search) {
         where.OR = [
-            { title: { contains: search, mode: 'insensitive' } },
-            { ticketId: { contains: search, mode: 'insensitive' } },
+            { title: { contains: params.search, mode: 'insensitive' } },
+            { ticketId: { contains: params.search, mode: 'insensitive' } },
         ];
     }
+
+    if (params.status) where.status = params.status;
+    if (params.priority) where.priority = params.priority;
+    if (params.department && params.department !== "ALL") where.department = params.department;
 
     return prisma.ticket.findMany({
         where,
@@ -114,7 +122,12 @@ export async function getDashboardTickets(search?: string) {
     });
 }
 
-export async function getMyTickets(search?: string) {
+export async function getMyTickets(params: {
+    search?: string;
+    status?: Status;
+    priority?: Priority;
+    department?: string;
+}) {
     const { userId } = await auth();
     if (!userId) return [];
 
@@ -125,12 +138,16 @@ export async function getMyTickets(search?: string) {
     if (!dbUser) return [];
 
     const where: any = { submittedById: dbUser.id };
-    if (search) {
+    if (params.search) {
         where.OR = [
-            { title: { contains: search, mode: 'insensitive' } },
-            { ticketId: { contains: search, mode: 'insensitive' } },
+            { title: { contains: params.search, mode: 'insensitive' } },
+            { ticketId: { contains: params.search, mode: 'insensitive' } },
         ];
     }
+
+    if (params.status) where.status = params.status;
+    if (params.priority) where.priority = params.priority;
+    if (params.department && params.department !== "ALL") where.department = params.department;
 
     return prisma.ticket.findMany({
         where,
