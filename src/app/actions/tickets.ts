@@ -90,9 +90,12 @@ export async function getDashboardTickets(search?: string) {
     if (!dbUser) return [];
 
     const where: any = {};
-    if (dbUser.role !== Role.AGENT && dbUser.role !== Role.SUPER_ADMIN && dbUser.role !== Role.SUB_ADMIN) {
+    if (dbUser.role === Role.AGENT) {
+        where.assignedToId = dbUser.id;
+    } else if (dbUser.role === Role.SUBMITTER) {
         where.submittedById = dbUser.id;
     }
+    // SUPER_ADMIN and SUB_ADMIN see all (where remains empty)
 
     if (search) {
         where.OR = [

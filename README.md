@@ -6,15 +6,15 @@ A premium, enterprise-grade internal ticketing solution built with **Next.js 15*
 
 ### 🛠️ Core Workflow
 - **Custom Ticket IDs**: Auto-generated sequential IDs (e.g., `YLN-0001`).
-- **Hybrid Views**: Switch between a high-efficiency **List View** and a visual **Kanban Board**.
+- **Hybrid Views**: Switch between a high-efficiency **Global List View** (/tickets) and a visual **Kanban Board**.
 - **Smart Dashboard**: Role-aware widgets showing personal work, unassigned tickets, and global stats.
 - **Global Search**: Real-time, debounced search across all ticket attributes.
 
 ### 🛡️ Advanced RBAC (Role-Based Access Control)
-- **Super Admin**: Full platform control, user management, and core data deletion.
-- **Sub Admin**: Team management and reporting capabilities without destructive permissions.
-- **Agent**: Dedicated resolution workspace with Kanban access.
-- **Submitter**: Simplified portal for tracking personal issues.
+- **Super Admin**: Full platform control, user management, and core data deletion. Sees all tickets.
+- **Sub Admin**: Team management and assignment capabilities. Sees all tickets.
+- **Agent**: Dedicated workspace focusing on **assigned tickets only** for maximum focus.
+- **Submitter**: Simplified portal for tracking personal issues only.
 
 ### 📊 Intelligence & Audit
 - **Activity Log**: Every status change, assignment, and update is tracked in a permanent audit trail.

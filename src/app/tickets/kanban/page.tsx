@@ -1,12 +1,12 @@
 import { getDashboardTickets } from "@/app/actions/tickets";
-import { getRole } from "@/lib/roles";
+import { getDbRole } from "@/lib/roles";
 import { KanbanBoard } from "@/components/kanban-board";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { LayoutGrid, List } from "lucide-react";
+import { Role, Status, Priority } from "@/lib/constants";
 import Link from "next/link";
 import { SearchInput } from "@/components/search-input";
-import { Role, Status, Priority } from "@/lib/constants";
 
 interface TicketData {
     id: string;
@@ -21,7 +21,7 @@ interface TicketData {
 export default async function KanbanPage(props: { searchParams: Promise<{ q?: string }> }) {
     const searchParams = await props.searchParams;
     const query = searchParams.q;
-    const role = await getRole();
+    const role = await getDbRole();
 
     if (role !== Role.AGENT && role !== Role.SUPER_ADMIN && role !== Role.SUB_ADMIN) {
         redirect("/dashboard");
@@ -39,7 +39,7 @@ export default async function KanbanPage(props: { searchParams: Promise<{ q?: st
                 <div className="flex items-center gap-3">
                     <SearchInput placeholder="Filter board..." />
                     <div className="flex items-center gap-2">
-                        <Link href="/dashboard">
+                        <Link href="/tickets">
                             <Button variant="outline" size="sm" className="rounded-full gap-2">
                                 <List className="w-4 h-4" />
                                 List View

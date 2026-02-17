@@ -1,5 +1,5 @@
 import { getAllUsers, deleteUser } from "@/app/actions/admin";
-import { getRole, isSuperAdmin } from "@/lib/roles";
+import { getDbRole, isSuperAdmin } from "@/lib/roles";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -23,7 +23,7 @@ interface UserWithCounts {
 }
 
 export default async function AdminUsersPage() {
-    const role = await getRole();
+    const role = await getDbRole();
     const superAdmin = await isSuperAdmin();
 
     if (role !== Role.SUPER_ADMIN && role !== Role.SUB_ADMIN) {

@@ -2,20 +2,20 @@ import { getTicketById } from "@/app/actions/tickets";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "../../../components/ui/separator";
+import { Separator } from "@/components/ui/separator";
 import { format } from "date-fns";
 import { ArrowLeft, User, Calendar, Tag, Shield, History, MessageSquare, Lock } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CommentForm } from "@/components/comment-form";
-import { getRole } from "@/lib/roles";
+import { getDbRole } from "@/lib/roles";
 import { Role } from "@/lib/constants";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default async function TicketDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const ticket = await getTicketById(id);
-    const userRole = await getRole();
+    const userRole = await getDbRole();
 
     if (!ticket) {
         notFound();

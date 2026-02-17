@@ -1,5 +1,5 @@
 import { getDashboardTickets, getUnassignedTickets, getMyAssignedTickets } from "@/app/actions/tickets";
-import { getRole } from "@/lib/roles";
+import { getDbRole } from "@/lib/roles";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,7 @@ export default async function DashboardPage(props: { searchParams: Promise<{ q?:
     const query = searchParams.q;
 
     const tickets = await getDashboardTickets(query) as unknown as TicketStats[];
-    const role = await getRole();
+    const role = await getDbRole();
     const unassigned = await getUnassignedTickets() as unknown as TicketStats[];
     const myAssigned = await getMyAssignedTickets() as unknown as TicketStats[];
 
@@ -47,7 +47,7 @@ export default async function DashboardPage(props: { searchParams: Promise<{ q?:
                     {(role === Role.AGENT || role === Role.SUPER_ADMIN || role === Role.SUB_ADMIN) && (
                         <div className="flex items-center gap-2">
                             <ExportButton data={tickets} />
-                            <Link href="/dashboard">
+                            <Link href="/tickets">
                                 <Button variant="secondary" size="sm" className="rounded-full gap-2">
                                     <List className="w-4 h-4" />
                                     List View

@@ -1,4 +1,5 @@
-import { getMyTickets } from "@/app/actions/tickets";
+import { getDashboardTickets } from "@/app/actions/tickets";
+import { getDbRole } from "@/lib/roles";
 import {
     Table,
     TableBody,
@@ -12,9 +13,11 @@ import { Card } from "@/components/ui/card";
 import { format } from "date-fns";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { PlusCircle } from "lucide-react";
+import { LayoutGrid, PlusCircle } from "lucide-react";
 import { SearchInput } from "@/components/search-input";
-import { Status, Priority } from "@prisma/client";
+import { Role, Status, Priority } from "@/lib/constants";
+import { ExportButton } from "@/components/export-button";
+import { redirect } from "next/navigation";
 
 interface TicketItem {
     id: string;
@@ -23,30 +26,40 @@ interface TicketItem {
     status: Status;
     priority: Priority;
     createdAt: Date | string;
+    submittedBy: { name: string | null };
+    assignedTo: { name: string | null } | null;
 }
 
-export default async function MyTicketsPage(props: { searchParams: Promise<{ q?: string }> }) {
+export default async function TicketsPage(props: { searchParams: Promise<{ q?: string }> }) {
     const searchParams = await props.searchParams;
     const query = searchParams.q;
-    const tickets = await getMyTickets(query) as unknown as TicketItem[];
+    const role = await getDbRole();
+
+    // Staff only page
+    if (role === Role.SUBMITTER) {
+        redirect("/my-tickets");
+    }
+
+    // Admins see all, Agents see assigned (handled by getDashboardTickets logic)
+    const tickets = await getDashboardTickets(query) as unknown as TicketItem[];
 
     return (
         <div className="container py-10 px-4 mx-auto space-y-8 animate-in fade-in duration-500">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-extrabold tracking-tight">My Tickets</h1>
-                    <p className="text-muted-foreground mt-1">Manage and track your support requests.</p>
+                    <h1 className="text-3xl font-extrabold tracking-tight">Global Tickets</h1>
+                    <p className="text-muted-foreground mt-1">Manage all support requests in the system.</p>
                 </div>
-                <Link href="/tickets/new">
-                    <Button className="rounded-full gap-2 shadow-lg shadow-primary/10">
-                        <PlusCircle className="w-4 h-4" />
-                        New Ticket
-                    </Button>
-                </Link>
-            </div>
-
-            <div className="flex items-center justify-between gap-4">
-                <SearchInput placeholder="Search by ID or title..." />
+                <div className="flex flex-col sm:flex-row items-center gap-3">
+                    <SearchInput placeholder="Search ID or title..." />
+                    <ExportButton data={tickets} />
+                    <Link href="/tickets/kanban">
+                        <Button variant="outline" size="sm" className="rounded-full gap-2">
+                            <LayoutGrid className="w-4 h-4" />
+                            Kanban board
+                        </Button>
+                    </Link>
+                </div>
             </div>
 
             <Card className="rounded-3xl overflow-hidden border-zinc-200 shadow-sm">
@@ -57,19 +70,15 @@ export default async function MyTicketsPage(props: { searchParams: Promise<{ q?:
                             <TableHead className="font-bold uppercase text-[11px] tracking-wider py-4">Title</TableHead>
                             <TableHead className="font-bold uppercase text-[11px] tracking-wider py-4">Status</TableHead>
                             <TableHead className="font-bold uppercase text-[11px] tracking-wider py-4">Priority</TableHead>
-                            <TableHead className="font-bold uppercase text-[11px] tracking-wider py-4">Submitted</TableHead>
+                            <TableHead className="font-bold uppercase text-[11px] tracking-wider py-4">Requester</TableHead>
+                            <TableHead className="font-bold uppercase text-[11px] tracking-wider py-4 text-right pr-6">Submitted</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {tickets.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={5} className="h-48 text-center text-muted-foreground">
-                                    <div className="flex flex-col items-center gap-2">
-                                        <p className="font-medium">You haven't submitted any tickets yet.</p>
-                                        <Link href="/tickets/new" className="text-primary hover:underline text-sm font-semibold">
-                                            Create your first ticket
-                                        </Link>
-                                    </div>
+                                <TableCell colSpan={6} className="h-48 text-center text-muted-foreground">
+                                    <p className="font-medium">No tickets matching your search.</p>
                                 </TableCell>
                             </TableRow>
                         ) : (
@@ -80,8 +89,8 @@ export default async function MyTicketsPage(props: { searchParams: Promise<{ q?:
                                             {ticket.ticketId}
                                         </Link>
                                     </TableCell>
-                                    <TableCell className="font-semibold max-w-[300px] truncate py-4">
-                                        <Link href={`/tickets/${ticket.id}`} className="block">
+                                    <TableCell className="font-semibold py-4">
+                                        <Link href={`/tickets/${ticket.id}`} className="block truncate max-w-[250px]">
                                             {ticket.title}
                                         </Link>
                                     </TableCell>
@@ -100,8 +109,11 @@ export default async function MyTicketsPage(props: { searchParams: Promise<{ q?:
                                             {ticket.priority}
                                         </Badge>
                                     </TableCell>
-                                    <TableCell className="text-muted-foreground text-sm py-4">
-                                        {format(new Date(ticket.createdAt), "MMM d, yyyy")}
+                                    <TableCell className="py-4 text-sm font-medium">
+                                        {ticket.submittedBy?.name || "Unknown"}
+                                    </TableCell>
+                                    <TableCell className="text-right pr-6 text-muted-foreground text-sm py-4">
+                                        {format(new Date(ticket.createdAt), "MMM d, HH:mm")}
                                     </TableCell>
                                 </TableRow>
                             ))
