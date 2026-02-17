@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# YLN Online Ticketing System 🎫
 
-## Getting Started
+A premium, enterprise-grade internal ticketing solution built with **Next.js 15**, **Prisma**, and **Clerk**. Designed for visual efficiency and robust administration.
 
-First, run the development server:
+## 🚀 Key Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### 🛠️ Core Workflow
+- **Custom Ticket IDs**: Auto-generated sequential IDs (e.g., `YLN-0001`).
+- **Hybrid Views**: Switch between a high-efficiency **List View** and a visual **Kanban Board**.
+- **Smart Dashboard**: Role-aware widgets showing personal work, unassigned tickets, and global stats.
+- **Global Search**: Real-time, debounced search across all ticket attributes.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 🛡️ Advanced RBAC (Role-Based Access Control)
+- **Super Admin**: Full platform control, user management, and core data deletion.
+- **Sub Admin**: Team management and reporting capabilities without destructive permissions.
+- **Agent**: Dedicated resolution workspace with Kanban access.
+- **Submitter**: Simplified portal for tracking personal issues.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 📊 Intelligence & Audit
+- **Activity Log**: Every status change, assignment, and update is tracked in a permanent audit trail.
+- **Internal Notes**: Private staff-only discussion threads for team collaboration.
+- **Excel Export**: Instant `.xlsx` data generation for advanced reporting.
+- **Email Automation**: Real-time notifications for ticket creation and status updates via **Resend**.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 💻 Tech Stack
+- **Framework**: Next.js 15 (App Router)
+- **Database**: Prisma 7 + Neon Postgres
+- **Auth**: Clerk (Role-based metadata)
+- **UI**: shadcn/ui + Tailwind CSS 4
+- **Animation**: Framer Motion / tailwindcss-animate
+- **Communication**: Resend API
 
-## Learn More
+## ⚙️ Project Setup
 
-To learn more about Next.js, take a look at the following resources:
+1. **Clone & Install**
+   ```bash
+   npm install
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. **Environment Variables**
+   Create a `.env` file with the following:
+   ```env
+   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_key
+   CLERK_SECRET_KEY=your_key
+   DATABASE_URL=your_neon_url
+   RESEND_API_KEY=your_resend_key
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. **Initialize Database**
+   ```bash
+   npx prisma db push
+   npx prisma generate
+   ```
 
-## Deploy on Vercel
+4. **Run Development Server**
+   ```bash
+   npm run dev
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🚢 Deployment (Vercel)
+The project is optimized for Vercel. Ensure you add the environment variables listed above to your Vercel project settings. The `package.json` includes a `postinstall` script to handle Prisma client generation in the cloud.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+*Built with ❤️ for YLN Internal Operations.*

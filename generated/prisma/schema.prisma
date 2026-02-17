@@ -1,0 +1,98 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id              String        @id @default(cuid())
+  clerkId         String        @unique
+  email           String        @unique
+  name            String?
+  role            Role          @default(SUBMITTER)
+  department      String?
+  tickets         Ticket[]      @relation("SubmittedTickets")
+  assignedTickets Ticket[]      @relation("AssignedTickets")
+  comments        Comment[]
+  activityLogs    ActivityLog[]
+}
+
+model Ticket {
+  id            String   @id @default(cuid())
+  ticketId      String   @unique // e.g. YLN-0001
+  title         String
+  description   String
+  status        Status   @default(NEW)
+  priority      Priority @default(MEDIUM)
+  department    String?
+  submittedById String
+  assignedToId  String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  submittedBy  User          @relation("SubmittedTickets", fields: [submittedById], references: [id])
+  assignedTo   User?         @relation("AssignedTickets", fields: [assignedToId], references: [id])
+  comments     Comment[]
+  attachments  Attachment[]
+  activityLogs ActivityLog[]
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  isPrivate Boolean  @default(false)
+  ticketId  String
+  userId    String
+  createdAt DateTime @default(now())
+
+  ticket Ticket @relation(fields: [ticketId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model ActivityLog {
+  id        String   @id @default(cuid())
+  ticketId  String
+  userId    String? // Who performed the action (null for system)
+  action    String // e.g. "STATUS_CHANGE", "ASSIGNMENT", "COMMENT"
+  details   String // e.g. "Changed status from New to In Progress"
+  createdAt DateTime @default(now())
+
+  ticket Ticket @relation(fields: [ticketId], references: [id])
+  user   User?  @relation(fields: [userId], references: [id])
+}
+
+model Attachment {
+  id           String @id @default(cuid())
+  fileName     String
+  fileUrl      String
+  ticketId     String
+  uploadedById String
+
+  ticket Ticket @relation(fields: [ticketId], references: [id])
+}
+
+enum Role {
+  SUBMITTER
+  AGENT
+  SUB_ADMIN
+  SUPER_ADMIN
+}
+
+enum Status {
+  NEW
+  IN_PROGRESS
+  WAITING
+  RESOLVED
+  CLOSED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
