@@ -64,30 +64,30 @@ export default async function TicketsPage(props: {
     return (
         <div className="min-h-screen bg-zinc-50/50 pb-20 animate-in fade-in duration-700">
             {/* Premium Header Section */}
-            <div className="bg-zinc-900 text-white pt-16 pb-24 px-4 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] -mr-64 -mt-64 animate-pulse" />
+            <div className="bg-white border-b border-zinc-200 text-zinc-900 pt-16 pb-24 px-4 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] -mr-64 -mt-64" />
                 <div className="container mx-auto relative z-10">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
                         <div className="space-y-4">
-                            <Badge variant="outline" className="border-white/10 bg-white/5 text-primary-foreground/80 rounded-full px-4 py-1 text-[10px] uppercase font-black tracking-[0.2em]">
+                            <Badge variant="outline" className="border-zinc-200 bg-zinc-100 text-zinc-500 rounded-full px-4 py-1 text-[10px] uppercase font-black tracking-[0.2em]">
                                 Administration
                             </Badge>
                             <h1 className="text-5xl md:text-6xl font-black tracking-tighter leading-tight italic">
                                 Global Tickets
                             </h1>
                             <p className="text-zinc-400 text-lg font-medium max-w-xl leading-relaxed">
-                                Manage and monitor all <span className="text-white font-bold">active support requests</span>.
+                                Manage and monitor all <span className="text-primary font-bold">active support requests</span>.
                                 High-efficiency central monitoring for staff.
                             </p>
                         </div>
 
                         <div className="flex flex-wrap items-center gap-4">
                             <TicketFilters />
-                            <SearchInput placeholder="Search ID or title..." className="bg-white/5 border-white/10 text-white placeholder:text-zinc-500 h-14 rounded-2xl w-full md:w-[350px] focus:bg-white focus:text-black transition-all" />
+                            <SearchInput placeholder="Search ID or title..." className="bg-zinc-50 border-zinc-200 text-zinc-900 placeholder:text-zinc-400 h-14 rounded-2xl w-full md:w-[350px] focus:bg-white transition-all shadow-sm" />
                             <div className="flex items-center gap-2">
                                 <ExportButton data={tickets} />
                                 <Link href="/tickets/kanban">
-                                    <Button variant="outline" className="rounded-full border-white/10 bg-white/5 hover:bg-white hover:text-black text-white h-14 px-8 font-black transition-all tracking-tight uppercase text-xs">
+                                    <Button variant="outline" className="rounded-full border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-600 h-14 px-8 font-black transition-all tracking-tight uppercase text-xs shadow-sm">
                                         <LayoutGrid className="w-4 h-4 mr-2" />
                                         Kanban board
                                     </Button>
@@ -138,7 +138,7 @@ export default async function TicketsPage(props: {
                                         </TableCell>
                                         <TableCell>
                                             <Badge variant={ticket.status === "RESOLVED" || ticket.status === "CLOSED" ? "outline" : "default"}
-                                                className={`rounded-xl px-4 py-1 text-[10px] font-black uppercase tracking-wider h-8 shadow-sm ${ticket.status === "RESOLVED" || ticket.status === "CLOSED" ? "bg-emerald-50 text-emerald-700 border-emerald-100" : "bg-zinc-900"}`}>
+                                                className={`rounded-xl px-4 py-1 text-[10px] font-black uppercase tracking-wider h-8 shadow-sm transition-colors ${ticket.status === "RESOLVED" || ticket.status === "CLOSED" ? "bg-emerald-50 text-emerald-700 border-emerald-100" : "bg-primary text-primary-foreground"}`}>
                                                 {ticket.status}
                                             </Badge>
                                         </TableCell>

@@ -39,33 +39,32 @@ export default async function DashboardPage(props: { searchParams: Promise<{ q?:
 
     return (
         <div className="min-h-screen bg-zinc-50/50 pb-20 animate-in fade-in duration-700">
-            {/* Premium Header Section */}
-            <div className="bg-zinc-900 text-white pt-16 pb-24 px-4 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] -mr-64 -mt-64 animate-pulse" />
-                <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-blue-500/10 rounded-full blur-[100px] -ml-32 -mb-32" />
+            {/* Refined Header Section */}
+            <div className="bg-white border-b border-zinc-200 text-zinc-900 pt-16 pb-24 px-4 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] -mr-64 -mt-64" />
 
                 <div className="container mx-auto relative z-10">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
                         <div className="space-y-4">
-                            <Badge variant="outline" className="border-white/10 bg-white/5 text-primary-foreground/80 rounded-full px-4 py-1 text-[10px] uppercase font-black tracking-[0.2em] backdrop-blur-md">
+                            <Badge variant="outline" className="border-primary/20 bg-primary/5 text-primary rounded-full px-4 py-1 text-[10px] uppercase font-black tracking-[0.2em]">
                                 Platform Overview
                             </Badge>
-                            <h1 className="text-5xl md:text-6xl font-black tracking-tighter leading-tight italic">
+                            <h1 className="text-5xl md:text-6xl font-black tracking-tighter leading-tight text-zinc-900">
                                 Hey, {dbUser?.name?.split(' ')[0] || "there"}! 👋
                             </h1>
-                            <p className="text-zinc-400 text-lg font-medium max-w-xl leading-relaxed">
-                                Welcome to your <span className="text-white font-bold">YLN Command Center</span>.
-                                Monitoring <span className="text-primary font-bold">{stats.total} total requests</span> across the system.
+                            <p className="text-zinc-500 text-lg font-medium max-w-xl leading-relaxed">
+                                Welcome back to <span className="text-primary font-bold">YLN Support</span>.
+                                There are <span className="text-zinc-900 font-bold">{stats.total} total requests</span> in the system.
                             </p>
                         </div>
 
                         <div className="flex flex-wrap items-center gap-3">
-                            <SearchInput placeholder="Quick find ticket..." className="bg-white/5 border-white/10 text-white placeholder:text-zinc-500 h-12 rounded-2xl w-full md:w-[300px] focus:bg-white focus:text-black transition-all" />
+                            <SearchInput placeholder="Quick find ticket..." className="bg-zinc-50 border-zinc-200 text-zinc-900 placeholder:text-zinc-400 h-12 rounded-2xl w-full md:w-[300px] focus:bg-white transition-all shadow-sm" />
                             {(role === Role.AGENT || role === Role.SUPER_ADMIN || role === Role.SUB_ADMIN) && (
                                 <div className="flex items-center gap-2">
                                     <ExportButton data={tickets} />
                                     <Link href="/tickets">
-                                        <Button variant="outline" className="rounded-full border-white/10 bg-white/5 hover:bg-white hover:text-black text-white h-12 px-6 font-bold transition-all">
+                                        <Button variant="outline" className="rounded-full border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-600 h-12 px-6 font-bold transition-all shadow-sm">
                                             <List className="w-4 h-4 mr-2" />
                                             List View
                                         </Button>
@@ -136,17 +135,17 @@ export default async function DashboardPage(props: { searchParams: Promise<{ q?:
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mt-12">
                     {/* Main Feed */}
                     <div className="lg:col-span-2 space-y-8">
-                        <Card className="rounded-[2.5rem] border-none shadow-2xl bg-white overflow-hidden">
-                            <CardHeader className="bg-zinc-900 px-8 py-8 text-white flex flex-row items-center justify-between">
+                        <Card className="rounded-[2.5rem] border border-zinc-100 shadow-xl bg-white overflow-hidden">
+                            <CardHeader className="bg-zinc-50 px-8 py-6 border-b border-zinc-100 flex flex-row items-center justify-between">
                                 <div>
                                     <div className="flex items-center gap-2 mb-1">
-                                        <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                                        <CardTitle className="text-2xl font-black tracking-tighter uppercase italic">Recent Activity</CardTitle>
+                                        <div className="w-2 h-2 rounded-full bg-primary" />
+                                        <CardTitle className="text-xl font-black tracking-tight text-zinc-900 uppercase">Recent Activity</CardTitle>
                                     </div>
-                                    <p className="text-zinc-400 text-sm font-medium">Real-time update stream</p>
+                                    <p className="text-zinc-400 text-xs font-semibold uppercase tracking-wider">Live System Pulse</p>
                                 </div>
                                 <Link href="/my-tickets">
-                                    <Button variant="outline" className="rounded-full border-white/10 bg-white/5 hover:bg-white hover:text-black text-white px-6 font-bold transition-all">
+                                    <Button variant="outline" className="rounded-full border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-600 px-6 font-bold transition-all shadow-sm">
                                         View All
                                     </Button>
                                 </Link>
@@ -175,7 +174,7 @@ export default async function DashboardPage(props: { searchParams: Promise<{ q?:
                                                 </div>
                                             </div>
                                             <Badge variant={ticket.status === "RESOLVED" || ticket.status === "CLOSED" ? "outline" : "default"}
-                                                className={`rounded-xl px-4 py-1 text-[10px] font-black uppercase tracking-wider h-8 shadow-sm ${ticket.status === "RESOLVED" || ticket.status === "CLOSED" ? "bg-emerald-50 text-emerald-700 border-emerald-100" : "bg-zinc-900"}`}>
+                                                className={`rounded-xl px-4 py-1 text-[10px] font-black uppercase tracking-wider h-8 shadow-sm transition-colors ${ticket.status === "RESOLVED" || ticket.status === "CLOSED" ? "bg-emerald-50 text-emerald-700 border-emerald-100" : "bg-primary text-primary-foreground"}`}>
                                                 {ticket.status}
                                             </Badge>
                                         </Link>
@@ -198,8 +197,8 @@ export default async function DashboardPage(props: { searchParams: Promise<{ q?:
                         {(role === Role.AGENT || role === Role.SUPER_ADMIN || role === Role.SUB_ADMIN) && (
                             <>
                                 {/* Unassigned Tickets */}
-                                <Card className="rounded-[2.5rem] border-none shadow-2xl bg-white overflow-hidden p-2">
-                                    <div className="bg-rose-600 px-6 py-6 text-white rounded-[2rem] relative overflow-hidden">
+                                <Card className="rounded-[2.5rem] border border-secondary/10 shadow-xl bg-white overflow-hidden p-2">
+                                    <div className="bg-secondary px-6 py-6 text-white rounded-[2rem] relative overflow-hidden">
                                         <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-12 -mt-12" />
                                         <CardTitle className="text-sm font-black flex items-center gap-3 uppercase tracking-widest">
                                             <ShieldAlert className="w-5 h-5" />
@@ -210,9 +209,9 @@ export default async function DashboardPage(props: { searchParams: Promise<{ q?:
                                     <CardContent className="pt-6 px-4 pb-4">
                                         <div className="space-y-3">
                                             {unassigned.slice(0, 3).map(t => (
-                                                <Link key={t.id} href={`/tickets/${t.id}`} className="block p-4 rounded-2xl bg-rose-50/50 border border-rose-100/50 hover:bg-rose-50 transition-all group">
-                                                    <p className="text-sm font-black text-rose-900 group-hover:text-rose-600 transition-colors uppercase tracking-tight truncate">{t.title}</p>
-                                                    <p className="text-[10px] font-black italic text-rose-400 mt-1">{t.ticketId}</p>
+                                                <Link key={t.id} href={`/tickets/${t.id}`} className="block p-4 rounded-2xl bg-secondary/5 border border-secondary/10 hover:bg-secondary/10 transition-all group">
+                                                    <p className="text-sm font-black text-secondary group-hover:text-secondary/80 transition-colors uppercase tracking-tight truncate">{t.title}</p>
+                                                    <p className="text-[10px] font-black italic text-secondary/40 mt-1">{t.ticketId}</p>
                                                 </Link>
                                             ))}
                                             {unassigned.length === 0 && (
@@ -225,8 +224,8 @@ export default async function DashboardPage(props: { searchParams: Promise<{ q?:
                                 </Card>
 
                                 {/* Assigned to Me */}
-                                <Card className="rounded-[2.5rem] border-none shadow-2xl bg-white overflow-hidden p-2">
-                                    <div className="bg-sky-600 px-6 py-6 text-white rounded-[2rem] relative overflow-hidden">
+                                <Card className="rounded-[2.5rem] border border-primary/10 shadow-xl bg-white overflow-hidden p-2">
+                                    <div className="bg-primary px-6 py-6 text-white rounded-[2rem] relative overflow-hidden">
                                         <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-12 -mt-12" />
                                         <CardTitle className="text-sm font-black flex items-center gap-3 uppercase tracking-widest">
                                             <UserCheck className="w-5 h-5" />
@@ -237,11 +236,11 @@ export default async function DashboardPage(props: { searchParams: Promise<{ q?:
                                     <CardContent className="pt-6 px-4 pb-4">
                                         <div className="space-y-3">
                                             {myAssigned.slice(0, 3).map(t => (
-                                                <Link key={t.id} href={`/tickets/${t.id}`} className="block p-4 rounded-2xl bg-sky-50/50 border border-sky-100/50 hover:bg-sky-50 transition-all group">
-                                                    <p className="text-sm font-black text-sky-900 group-hover:text-sky-600 transition-colors uppercase tracking-tight truncate">{t.title}</p>
+                                                <Link key={t.id} href={`/tickets/${t.id}`} className="block p-4 rounded-2xl bg-primary/5 border border-primary/10 hover:bg-primary/10 transition-all group">
+                                                    <p className="text-sm font-black text-primary group-hover:text-primary/80 transition-colors uppercase tracking-tight truncate">{t.title}</p>
                                                     <div className="flex justify-between items-center mt-1">
-                                                        <p className="text-[10px] font-black italic text-sky-400">{t.ticketId}</p>
-                                                        <Badge variant="outline" className="text-[9px] font-black border-sky-200/50 bg-white/50 text-sky-700 rounded-lg h-5 italic uppercase">{t.status}</Badge>
+                                                        <p className="text-[10px] font-black italic text-primary/40">{t.ticketId}</p>
+                                                        <Badge variant="outline" className="text-[9px] font-black border-primary/20 bg-white/50 text-primary rounded-lg h-5 italic uppercase">{t.status}</Badge>
                                                     </div>
                                                 </Link>
                                             ))}
@@ -258,12 +257,12 @@ export default async function DashboardPage(props: { searchParams: Promise<{ q?:
 
                         {/* User Quick Tip */}
                         {role === Role.SUBMITTER && (
-                            <Card className="rounded-[3rem] border-none bg-zinc-900 text-white p-10 shadow-2xl relative overflow-hidden">
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 rounded-full blur-3xl -mr-16 -mt-16" />
+                            <Card className="rounded-[3rem] border border-primary/10 bg-white text-zinc-900 p-10 shadow-xl relative overflow-hidden">
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16" />
                                 <h3 className="font-black text-3xl mb-4 tracking-tighter leading-tight">Need immediate technical help?</h3>
-                                <p className="text-zinc-400 font-medium mb-8 leading-relaxed">Our average resolution time is <span className="text-white font-bold">12 hours</span>. You'll receive real-time alerts as we progress.</p>
+                                <p className="text-zinc-500 font-medium mb-8 leading-relaxed">Our average resolution time is <span className="text-primary font-bold">12 hours</span>. You'll receive real-time alerts as we progress.</p>
                                 <Link href="/tickets/new">
-                                    <Button className="w-full bg-white text-zinc-900 hover:bg-zinc-100 font-black rounded-2xl h-14 text-lg shadow-xl shadow-white/5 transition-transform hover:scale-[1.02]">
+                                    <Button className="w-full bg-primary text-white hover:bg-primary/90 font-black rounded-2xl h-14 text-lg shadow-xl shadow-primary/10 transition-transform hover:scale-[1.02]">
                                         Submit Ticket
                                     </Button>
                                 </Link>

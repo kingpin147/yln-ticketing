@@ -363,3 +363,31 @@ export async function addComment(id: string, content: string, isPrivate: boolean
     revalidatePath(`/tickets/${id}`);
     return comment;
 }
+
+export async function getAgents() {
+    const { userId } = await auth();
+    if (!userId) return [];
+
+    const dbUser = await prisma.user.findUnique({
+        where: { clerkId: userId },
+    });
+
+    if (!dbUser || (dbUser.role !== Role.SUPER_ADMIN && dbUser.role !== Role.SUB_ADMIN)) {
+        return [];
+    }
+
+    return prisma.user.findMany({
+        where: {
+            role: { in: [Role.AGENT, Role.SUB_ADMIN, Role.SUPER_ADMIN] }
+        },
+        select: {
+            id: true,
+            name: true,
+            role: true,
+            _count: {
+                select: { assignedTickets: true }
+            }
+        },
+        orderBy: { name: 'asc' }
+    });
+}

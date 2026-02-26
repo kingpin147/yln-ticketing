@@ -1,4 +1,4 @@
-import { getTicketById } from "@/app/actions/tickets";
+import { getTicketById, getAgents } from "@/app/actions/tickets";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,6 +8,8 @@ import { ArrowLeft, User, Calendar, Tag, Shield, History, MessageSquare, Lock } 
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CommentForm } from "@/components/comment-form";
+import { AssignAgentSelect } from "@/components/assign-agent-select";
+import { InviteUserModal } from "@/components/invite-user-modal";
 import { getDbRole } from "@/lib/roles";
 import { Role } from "@/lib/constants";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -16,6 +18,7 @@ export default async function TicketDetailPage({ params }: { params: Promise<{ i
     const { id } = await params;
     const ticket = await getTicketById(id);
     const userRole = await getDbRole();
+    const agents = (userRole === Role.SUPER_ADMIN || userRole === Role.SUB_ADMIN) ? await getAgents() : [];
 
     if (!ticket) {
         notFound();
@@ -27,19 +30,19 @@ export default async function TicketDetailPage({ params }: { params: Promise<{ i
     return (
         <div className="min-h-screen bg-zinc-50/50 pb-20 animate-in fade-in duration-700">
             {/* Premium Header Section */}
-            <div className="bg-zinc-900 text-white pt-16 pb-24 px-4 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] -mr-64 -mt-64 animate-pulse" />
+            <div className="bg-white border-b border-zinc-200 text-zinc-900 pt-16 pb-24 px-4 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] -mr-64 -mt-64" />
                 <div className="container mx-auto relative z-10">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
                         <div className="space-y-6">
                             <div className="flex items-center gap-3">
                                 <Link href={isStaff ? "/tickets" : "/my-tickets"}>
-                                    <Button variant="ghost" size="sm" className="rounded-full text-zinc-400 hover:text-white hover:bg-white/5 gap-2 font-black uppercase text-[10px] tracking-widest pl-2 pr-4 transition-all">
+                                    <Button variant="ghost" size="sm" className="rounded-full text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 gap-2 font-black uppercase text-[10px] tracking-widest pl-2 pr-4 transition-all">
                                         <ArrowLeft className="w-4 h-4" />
                                         Back to Fleet
                                     </Button>
                                 </Link>
-                                <Badge variant="outline" className="border-white/10 bg-white/5 text-primary-foreground/80 rounded-full px-4 py-1 text-[10px] uppercase font-black tracking-[0.2em]">
+                                <Badge variant="outline" className="border-zinc-200 bg-zinc-100 text-zinc-500 rounded-full px-4 py-1 text-[10px] uppercase font-black tracking-[0.2em]">
                                     Case Management
                                 </Badge>
                             </div>
@@ -49,7 +52,7 @@ export default async function TicketDetailPage({ params }: { params: Promise<{ i
                                     <span className="font-black text-sm text-primary italic tracking-widest uppercase">
                                         {ticket.ticketId}
                                     </span>
-                                    <Badge variant="default" className="rounded-full px-4 py-1 bg-white text-zinc-900 font-black uppercase text-[10px] tracking-widest h-6">
+                                    <Badge variant="default" className="rounded-full px-4 py-1 bg-primary text-primary-foreground font-black uppercase text-[10px] tracking-widest h-6">
                                         {ticket.status}
                                     </Badge>
                                 </div>
@@ -57,7 +60,7 @@ export default async function TicketDetailPage({ params }: { params: Promise<{ i
                                     {ticket.title}
                                 </h1>
                                 <p className="text-zinc-400 text-lg font-medium max-w-xl leading-relaxed">
-                                    Submitted by <span className="text-white font-bold">{ticket.submittedBy.name}</span> on {format(new Date(ticket.createdAt), "MMMM do")}.
+                                    Submitted by <span className="text-primary font-bold">{ticket.submittedBy.name}</span> on {format(new Date(ticket.createdAt), "MMMM do")}.
                                 </p>
                             </div>
                         </div>
@@ -232,9 +235,20 @@ export default async function TicketDetailPage({ params }: { params: Promise<{ i
                                     <div className="w-8 h-8 rounded-lg bg-zinc-100 flex items-center justify-center text-zinc-500 group-hover:bg-green-50 group-hover:text-green-600 transition-colors">
                                         <Shield className="w-4 h-4" />
                                     </div>
-                                    <div className="flex flex-col">
+                                    <div className="flex flex-col flex-1">
                                         <span className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider leading-none mb-1">Agent Assigned</span>
-                                        <span className="font-semibold">{ticket.assignedTo?.name || "Unassigned"}</span>
+                                        {(userRole === Role.SUPER_ADMIN || userRole === Role.SUB_ADMIN) ? (
+                                            <div className="mt-2">
+                                                <AssignAgentSelect
+                                                    ticketId={ticket.id}
+                                                    currentAgentId={ticket.assignedToId}
+                                                    agents={agents as any}
+                                                    canManageAdmins={userRole === Role.SUPER_ADMIN}
+                                                />
+                                            </div>
+                                        ) : (
+                                            <span className="font-semibold">{ticket.assignedTo?.name || "Unassigned"}</span>
+                                        )}
                                     </div>
                                 </div>
                             </CardContent>

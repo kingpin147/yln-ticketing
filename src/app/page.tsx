@@ -14,7 +14,7 @@ export default function Home() {
         </div>
 
         <h1 className="text-5xl sm:text-7xl font-extrabold tracking-tighter max-w-4xl leading-[1.1]">
-          Support that feels like <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">Magic.</span>
+          Support that feels like <span className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent italic">Magic.</span>
         </h1>
 
         <p className="mt-4 text-xl sm:text-2xl text-muted-foreground max-w-2xl leading-relaxed">
@@ -40,7 +40,7 @@ export default function Home() {
           </SignedIn>
 
           <Link href="/tickets/new">
-            <Button variant="outline" size="lg" className="rounded-full px-8 h-12 text-base font-semibold hover:bg-zinc-50 border-zinc-200">
+            <Button variant="outline" size="lg" className="rounded-full px-8 h-12 text-base font-semibold hover:bg-zinc-50 border-zinc-200 text-zinc-600 shadow-sm transition-all active:scale-95">
               Submit a Request
             </Button>
           </Link>
@@ -48,24 +48,24 @@ export default function Home() {
 
         {/* Feature Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-24 w-full max-w-5xl text-left">
-          <div className="p-6 rounded-3xl border bg-card/50 backdrop-blur-sm space-y-3">
-            <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+          <div className="p-6 rounded-3xl border border-yln-navy/5 bg-card/50 backdrop-blur-sm space-y-3">
+            <div className="w-10 h-10 rounded-2xl bg-yln-navy/10 flex items-center justify-center text-yln-navy">
               <ShieldCheck className="w-5 h-5" />
             </div>
             <h3 className="text-lg font-bold">Secure Access</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">Enterprise-grade role management keeping your internal data private and protected.</p>
           </div>
 
-          <div className="p-6 rounded-3xl border bg-card/50 backdrop-blur-sm space-y-3">
-            <div className="w-10 h-10 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-500">
+          <div className="p-6 rounded-3xl border border-zinc-100 bg-white/50 backdrop-blur-sm space-y-3 shadow-sm hover:shadow-md transition-shadow">
+            <div className="w-10 h-10 rounded-2xl bg-accent/10 flex items-center justify-center text-accent">
               <Activity className="w-5 h-5" />
             </div>
             <h3 className="text-lg font-bold">Real-time Tracing</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">Track every ticket from submission to resolution with instant live updates and status alerts.</p>
           </div>
 
-          <div className="p-6 rounded-3xl border bg-card/50 backdrop-blur-sm space-y-3">
-            <div className="w-10 h-10 rounded-2xl bg-orange-500/10 flex items-center justify-center text-orange-500">
+          <div className="p-6 rounded-3xl border border-zinc-100 bg-white/50 backdrop-blur-sm space-y-3 shadow-sm hover:shadow-md transition-shadow">
+            <div className="w-10 h-10 rounded-2xl bg-secondary/10 flex items-center justify-center text-secondary">
               <Zap className="w-5 h-5" />
             </div>
             <h3 className="text-lg font-bold">Intelligent Routing</h3>

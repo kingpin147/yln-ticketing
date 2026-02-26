@@ -75,13 +75,13 @@ export function AddUserModal({ canManageAdmins }: { canManageAdmins: boolean }) 
                     Add Member
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[480px] rounded-[3rem] border-none shadow-2xl bg-white p-0 overflow-hidden">
-                <div className="bg-zinc-900 px-10 py-12 text-white relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 rounded-full blur-3xl -mr-16 -mt-16" />
+            <DialogContent className="sm:max-w-[480px] rounded-[3rem] border border-zinc-100 shadow-2xl bg-white p-0 overflow-hidden">
+                <div className="bg-white px-10 py-12 text-zinc-900 border-b border-zinc-100 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-48 h-48 bg-primary/5 rounded-full blur-3xl -mr-24 -mt-24" />
                     <DialogHeader className="relative z-10">
-                        <DialogTitle className="text-4xl font-black tracking-tighter italic">Create Profile</DialogTitle>
+                        <DialogTitle className="text-4xl font-black tracking-tighter italic text-zinc-900">Create Profile</DialogTitle>
                         <DialogDescription className="text-zinc-400 font-medium text-lg mt-2 leading-relaxed">
-                            Provision a new <span className="text-white font-bold">platform account</span> for staff or users.
+                            Provision a new <span className="text-primary font-bold">platform account</span> for staff or users.
                         </DialogDescription>
                     </DialogHeader>
                 </div>
@@ -98,7 +98,7 @@ export function AddUserModal({ canManageAdmins }: { canManageAdmins: boolean }) 
                                         <FormControl>
                                             <div className="relative group">
                                                 <User className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-300 group-focus-within:text-primary transition-colors" />
-                                                <Input placeholder="John Doe" {...field} className="rounded-2xl h-14 pl-12 border-zinc-100 bg-zinc-50/50 focus:bg-white focus:ring-2 focus:ring-primary/10 transition-all font-bold placeholder:text-zinc-200" />
+                                                <Input placeholder="John Doe" {...field} className="rounded-2xl h-14 pl-12 border-zinc-200 bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-primary/10 transition-all font-bold placeholder:text-zinc-200" />
                                             </div>
                                         </FormControl>
                                         <FormMessage className="font-bold text-[10px] uppercase tracking-wider" />
@@ -114,7 +114,7 @@ export function AddUserModal({ canManageAdmins }: { canManageAdmins: boolean }) 
                                         <FormControl>
                                             <div className="relative group">
                                                 <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-300 group-focus-within:text-primary transition-colors" />
-                                                <Input placeholder="john@example.com" {...field} className="rounded-2xl h-14 pl-12 border-zinc-100 bg-zinc-50/50 focus:bg-white focus:ring-2 focus:ring-primary/10 transition-all font-bold placeholder:text-zinc-200" />
+                                                <Input placeholder="john@example.com" {...field} className="rounded-2xl h-14 pl-12 border-zinc-200 bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-primary/10 transition-all font-bold placeholder:text-zinc-200" />
                                             </div>
                                         </FormControl>
                                         <FormMessage className="font-bold text-[10px] uppercase tracking-wider" />
@@ -131,7 +131,7 @@ export function AddUserModal({ canManageAdmins }: { canManageAdmins: boolean }) 
                                             <FormControl>
                                                 <div className="relative group">
                                                     <Shield className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-300 group-focus-within:text-primary z-10 transition-colors" />
-                                                    <SelectTrigger className="rounded-2xl h-14 pl-12 border-zinc-100 bg-zinc-50/50 focus:bg-white focus:ring-2 focus:ring-primary/10 transition-all font-bold">
+                                                    <SelectTrigger className="rounded-2xl h-14 pl-12 border-zinc-200 bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-primary/10 transition-all font-bold">
                                                         <SelectValue placeholder="Select a role" />
                                                     </SelectTrigger>
                                                 </div>
@@ -147,7 +147,7 @@ export function AddUserModal({ canManageAdmins }: { canManageAdmins: boolean }) 
                                     </FormItem>
                                 )}
                             />
-                            <Button type="submit" className="w-full h-16 rounded-2xl text-lg font-black shadow-xl shadow-zinc-200 bg-zinc-900 hover:bg-zinc-800 text-white transition-all hover:scale-[1.02] active:scale-[0.98] mt-4" disabled={loading}>
+                            <Button type="submit" className="w-full h-16 rounded-2xl text-lg font-black shadow-xl shadow-primary/10 bg-primary hover:bg-primary/90 text-white transition-all hover:scale-[1.02] active:scale-[0.98] mt-4" disabled={loading}>
                                 {loading ? "Creating..." : "Provision Account"}
                             </Button>
                         </form>

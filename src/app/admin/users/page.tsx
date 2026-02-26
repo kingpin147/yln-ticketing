@@ -6,6 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { RoleSwitcher } from "@/components/role-switcher";
 import { AddUserModal } from "@/components/add-user-modal";
+import { InviteUserModal } from "@/components/invite-user-modal";
 import { Role } from "@/lib/constants";
 import { Users, Shield, UserCog, Mail, Calendar, Trash2 } from "lucide-react";
 import { format } from "date-fns";
@@ -45,28 +46,29 @@ export default async function AdminUsersPage(props: {
     return (
         <div className="min-h-screen bg-zinc-50/50 pb-20 animate-in fade-in duration-700">
             {/* Premium Header Section */}
-            <div className="bg-zinc-900 text-white pt-16 pb-24 px-4 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] -mr-64 -mt-64 animate-pulse" />
+            <div className="bg-white border-b border-zinc-200 text-zinc-900 pt-16 pb-24 px-4 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] -mr-64 -mt-64" />
                 <div className="container mx-auto relative z-10">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
                         <div className="space-y-4">
-                            <Badge variant="outline" className="border-white/10 bg-white/5 text-primary-foreground/80 rounded-full px-4 py-1 text-[10px] uppercase font-black tracking-[0.2em] backdrop-blur-md">
+                            <Badge variant="outline" className="border-zinc-200 bg-zinc-100 text-zinc-500 rounded-full px-4 py-1 text-[10px] uppercase font-black tracking-[0.2em]">
                                 Platform Control
                             </Badge>
                             <h1 className="text-5xl md:text-6xl font-black tracking-tighter leading-tight italic">
                                 Access Control
                             </h1>
                             <p className="text-zinc-400 text-lg font-medium max-w-xl leading-relaxed">
-                                Manage platform <span className="text-white font-bold">members, roles</span>, and administrative safety.
+                                Manage platform <span className="text-primary font-bold">members, roles</span>, and administrative safety.
                                 High-visibility governance for {role.replace("_", " ")}s.
                             </p>
                         </div>
 
                         <div className="flex flex-wrap items-center gap-3">
                             <UserFilters />
-                            <SearchInput placeholder="Search name or email..." className="bg-white/5 border-white/10 text-white placeholder:text-zinc-500 h-12 rounded-2xl w-full md:w-[280px] focus:bg-white focus:text-black transition-all" />
+                            <SearchInput placeholder="Search name or email..." className="bg-zinc-50 border-zinc-200 text-zinc-900 placeholder:text-zinc-400 h-12 rounded-2xl w-full md:w-[280px] focus:bg-white transition-all shadow-sm" />
+                            <InviteUserModal canManageAdmins={superAdmin} />
                             <AddUserModal canManageAdmins={superAdmin} />
-                            <Badge variant="outline" className="rounded-full px-6 py-2 gap-2 border-white/10 bg-white/5 text-primary-foreground font-black uppercase text-[10px] tracking-widest backdrop-blur-md h-12">
+                            <Badge variant="outline" className="rounded-full px-6 py-2 gap-2 border-zinc-200 bg-zinc-50 text-primary font-black uppercase text-[10px] tracking-widest h-12">
                                 <Shield className="w-4 h-4 text-primary" />
                                 {role.replace("_", " ")}
                             </Badge>

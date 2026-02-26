@@ -28,7 +28,7 @@ export function TicketFilters() {
 
     return (
         <div className="flex flex-wrap items-center gap-3">
-            <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900 rounded-full text-[10px] font-black uppercase tracking-[0.15em] text-white shadow-sm">
+            <div className="flex items-center gap-2 px-4 py-2 bg-zinc-100 rounded-full text-[10px] font-black uppercase tracking-[0.15em] text-zinc-500 border border-zinc-200 shadow-sm">
                 <Filter className="w-3.5 h-3.5" />
                 Filters
             </div>

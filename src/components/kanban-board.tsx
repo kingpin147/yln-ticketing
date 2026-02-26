@@ -69,20 +69,20 @@ export function KanbanBoard({ initialTickets }: KanbanBoardProps) {
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
-            <div className="flex gap-6 overflow-x-auto pb-8 px-2">
+            <div className="flex gap-6 overflow-x-auto pb-12 px-2 snap-x scrollbar-thin scrollbar-thumb-zinc-200 scrollbar-track-transparent">
                 {COLUMNS.map((column) => {
                     const columnTickets = tickets.filter((t) => t.status === column.id);
                     const columnCount = columnTickets.length;
 
                     return (
-                        <div key={column.id} className="flex flex-col w-[340px] shrink-0">
+                        <div key={column.id} className="flex flex-col w-[320px] md:w-[350px] shrink-0 snap-start">
                             {/* Column Header */}
-                            <div className="mb-4 px-4 py-3 bg-zinc-900 rounded-2xl shadow-sm">
+                            <div className="mb-4 px-6 py-4 bg-white border border-zinc-100 rounded-2xl shadow-sm">
                                 <div className="flex items-center justify-between">
-                                    <h3 className="font-black text-sm uppercase tracking-[0.15em] text-white">
+                                    <h3 className="font-black text-sm uppercase tracking-[0.15em] text-zinc-900">
                                         {column.title}
                                     </h3>
-                                    <Badge variant="secondary" className="rounded-full font-black text-xs bg-white/10 text-white border-none">
+                                    <Badge variant="outline" className="rounded-full font-black text-xs bg-zinc-50 text-zinc-500 border-zinc-100">
                                         {columnCount}
                                     </Badge>
                                 </div>
@@ -93,9 +93,9 @@ export function KanbanBoard({ initialTickets }: KanbanBoardProps) {
                                     <div
                                         {...provided.droppableProps}
                                         ref={provided.innerRef}
-                                        className={`flex flex-col gap-3 p-4 rounded-2xl min-h-[500px] transition-all ${snapshot.isDraggingOver
-                                                ? "bg-primary/5 border-2 border-dashed border-primary/30 shadow-inner"
-                                                : "bg-white border-2 border-zinc-100"
+                                        className={`flex flex-col gap-3 p-4 rounded-2xl min-h-[60vh] transition-all ${snapshot.isDraggingOver
+                                            ? "bg-primary/5 border-2 border-dashed border-primary/30 shadow-inner"
+                                            : "bg-white border-2 border-zinc-100"
                                             }`}
                                     >
                                         {columnTickets.map((ticket, index) => (
@@ -109,20 +109,20 @@ export function KanbanBoard({ initialTickets }: KanbanBoardProps) {
                                                             }`}
                                                     >
                                                         <Card className={`rounded-2xl border-zinc-200 overflow-hidden hover:shadow-lg transition-all cursor-grab active:cursor-grabbing ${snapshot.isDragging
-                                                                ? "shadow-2xl ring-4 ring-primary/20 bg-white scale-105"
-                                                                : "bg-white shadow-sm hover:border-zinc-300"
+                                                            ? "shadow-2xl ring-4 ring-primary/20 bg-white scale-105"
+                                                            : "bg-white shadow-sm hover:border-zinc-300"
                                                             }`}>
-                                                            <CardHeader className="p-4 pb-3 bg-zinc-50/50">
+                                                            <CardHeader className="p-4 pb-3 bg-zinc-50/50 border-b border-zinc-100">
                                                                 <div className="flex items-center justify-between mb-2">
-                                                                    <span className="text-[10px] font-black font-mono text-primary bg-primary/10 px-2 py-1 rounded-lg">
+                                                                    <span className="text-[10px] font-black font-mono text-primary bg-primary/5 border border-primary/10 px-2 py-1 rounded-lg">
                                                                         {ticket.ticketId}
                                                                     </span>
                                                                     <Badge
                                                                         variant="outline"
-                                                                        className={`rounded-full border-none text-[9px] font-black px-2.5 py-0.5 ${ticket.priority === "URGENT" ? "bg-rose-500 text-white" :
-                                                                                ticket.priority === "HIGH" ? "bg-orange-500 text-white" :
-                                                                                    ticket.priority === "MEDIUM" ? "bg-blue-500 text-white" :
-                                                                                        "bg-zinc-400 text-white"
+                                                                        className={`rounded-full border-none text-[9px] font-black px-2.5 py-0.5 shadow-sm ${ticket.priority === "URGENT" ? "bg-rose-500 text-white" :
+                                                                            ticket.priority === "HIGH" ? "bg-orange-500 text-white" :
+                                                                                ticket.priority === "MEDIUM" ? "bg-primary text-white" :
+                                                                                    "bg-zinc-400 text-white"
                                                                             }`}
                                                                     >
                                                                         {ticket.priority}

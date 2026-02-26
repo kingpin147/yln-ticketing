@@ -10,25 +10,24 @@ A premium, enterprise-grade internal ticketing solution built with **Next.js 15*
 - **Smart Dashboard**: Role-aware widgets showing personal work, unassigned tickets, and global stats.
 - **Global Search**: Real-time, debounced search across all ticket attributes.
 
-### 🛡️ Advanced RBAC (Role-Based Access Control)
-- **Super Admin**: Full platform control. Can add users of any role, manage all members, and perform core data deletion.
-- **Sub Admin**: Team management and assignment capabilities. Can add **Agents** and **Regular Users** to the platform.
-- **Agent**: Dedicated workspace focusing on **assigned tickets only** for maximum focus.
-- **Submitter**: Simplified portal for tracking personal issues only.
+### 🛡️ Smart Member Management
+- **Workload-Aware Assignment**: Instant visibility into agent ticket loads during manual assignment.
+- **Auto-Assign Engine**: One-click "Smart Assignment" that automatically routes tickets to the staff member with the lowest workload.
+- **One-Click Invitations**: Seamless email-based team onboarding directly from the Admin Dashboard or active tickets.
+- **Role-aware Dashboard**: Tailored experiences for Super Admins, Sub-Admins, Agents, and Submitters.
 
 ### 📊 Intelligence & Management
-- **User Provisioning**: Directly add new members via a polished, role-aware dashboard modal. Instantly creates Clerk and Database profiles.
+- **Design Alignment**: Visual system perfectly synced with the premium aesthetic of `ylnteam.com` (Lime Green & Blue).
 - **Activity Log**: Every status change, assignment, and update is tracked in a permanent audit trail.
 - **Internal Notes**: Private staff-only discussion threads for team collaboration.
 - **Excel Export**: Robust `.xlsx` generation with full requester/agent details and safe date formatting.
 - **Email Automation**: Real-time notifications for ticket creation and status updates via **Resend**.
 
 ## 💻 Tech Stack
-- **Framework**: Next.js 15 (App Router)
+- **Framework**: Next.js 15 (App Router & Server Actions)
 - **Database**: Prisma 7 + Neon Postgres
-- **Auth**: Clerk (Role-based metadata)
-- **UI**: shadcn/ui + Tailwind CSS 4
-- **Animation**: Framer Motion / tailwindcss-animate
+- **Auth**: Clerk (Hybrid Role-based metadata)
+- **UI**: shadcn/ui + Tailwind CSS 3.4+
 - **Communication**: Resend API
 
 ## ⚙️ Project Setup

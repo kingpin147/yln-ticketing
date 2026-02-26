@@ -59,7 +59,7 @@ export function CommentForm({ ticketId, isStaff }: { ticketId: string; isStaff: 
                 <Button
                     type="submit"
                     disabled={isPending || !content.trim()}
-                    className="w-full sm:w-auto rounded-full h-14 px-10 font-black text-xs uppercase tracking-[0.15em] gap-3 shadow-xl shadow-zinc-200 transition-all hover:scale-[1.02] active:scale-[0.98] bg-zinc-900 hover:bg-zinc-800"
+                    className="w-full sm:w-auto rounded-full h-14 px-10 font-black text-xs uppercase tracking-[0.15em] gap-3 shadow-xl shadow-primary/10 transition-all hover:scale-[1.02] active:scale-[0.98] bg-primary hover:bg-primary/90 text-white"
                 >
                     {isPending ? (
                         <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />

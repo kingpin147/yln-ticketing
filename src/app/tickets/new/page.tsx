@@ -71,8 +71,8 @@ export default function NewTicketPage() {
     return (
         <div className="min-h-screen bg-zinc-50/50 pb-20 animate-in fade-in duration-700">
             {/* Premium Header Section */}
-            <div className="bg-zinc-900 text-white pt-16 pb-24 px-4 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] -mr-64 -mt-64 animate-pulse" />
+            <div className="bg-white border-b border-zinc-200 text-zinc-900 pt-16 pb-24 px-4 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] -mr-64 -mt-64" />
                 <div className="container mx-auto relative z-10">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
                         <div className="space-y-4">
@@ -167,7 +167,7 @@ export default function NewTicketPage() {
                                         </FormItem>
                                     )}
                                 />
-                                <Button type="submit" disabled={isPending} className="w-full h-16 rounded-2xl bg-zinc-900 text-white hover:bg-zinc-800 font-black text-lg transition-all hover:scale-[1.02] shadow-xl shadow-zinc-200 active:scale-[0.98]">
+                                <Button type="submit" disabled={isPending} className="w-full h-16 rounded-2xl bg-yln-navy text-white hover:bg-yln-navy/90 font-black text-lg transition-all hover:scale-[1.02] shadow-xl shadow-yln-navy/10 active:scale-[0.98]">
                                     {isPending ? "Submitting Request..." : "Submit Ticket Now"}
                                 </Button>
                             </form>

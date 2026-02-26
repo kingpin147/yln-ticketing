@@ -132,3 +132,29 @@ export async function createUser(data: { name: string; email: string; role: Role
     revalidatePath("/admin/users");
     return user;
 }
+
+export async function inviteUser(data: { email: string; role: Role }) {
+    const adminCheck = await isAdmin();
+    const superAdminCheck = await isSuperAdmin();
+
+    if (!adminCheck) throw new Error("Unauthorized");
+
+    // Sub-admins can only invite AGENTS or SUBMITTERS
+    if (!superAdminCheck && (data.role === Role.SUPER_ADMIN || data.role === Role.SUB_ADMIN)) {
+        throw new Error("Sub-admins cannot invite users with Admin roles");
+    }
+
+    const client = await clerkClient();
+
+    // Create invitation in Clerk
+    const invitation = await client.invitations.createInvitation({
+        emailAddress: data.email,
+        publicMetadata: {
+            role: data.role,
+        },
+        ignoreExisting: true, // If they are already invited/present, this helps avoid some errors
+    });
+
+    revalidatePath("/admin/users");
+    return invitation;
+}

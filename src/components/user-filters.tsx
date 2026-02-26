@@ -28,7 +28,7 @@ export function UserFilters() {
 
     return (
         <div className="flex flex-wrap items-center gap-2">
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-[10px] font-black uppercase tracking-widest text-zinc-400 mr-2">
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-zinc-100 border border-zinc-200 rounded-full text-[10px] font-black uppercase tracking-widest text-zinc-500 mr-2">
                 <Filter className="w-3 h-3" />
                 Filter Access
             </div>
@@ -37,7 +37,7 @@ export function UserFilters() {
                 defaultValue={searchParams.get("role") || "ALL"}
                 onValueChange={(v) => updateFilter("role", v)}
             >
-                <SelectTrigger className="w-[150px] h-10 rounded-full text-[10px] font-black uppercase tracking-tight bg-white/5 border-white/10 text-white transition-all focus:ring-primary/20 hover:bg-white/10">
+                <SelectTrigger className="w-[150px] h-10 rounded-full text-[10px] font-black uppercase tracking-tight bg-white border-zinc-200 text-zinc-900 transition-all focus:ring-primary/20 hover:bg-zinc-50 shadow-sm">
                     <SelectValue placeholder="Access Role" />
                 </SelectTrigger>
                 <SelectContent className="rounded-2xl border-none shadow-2xl p-2 bg-white">

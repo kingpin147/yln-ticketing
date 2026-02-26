@@ -19,21 +19,20 @@ export function SearchInput({
     const [value, setValue] = useState(searchParams.get("q")?.toString() || "");
 
     useEffect(() => {
-        const params = new URLSearchParams(searchParams);
-        if (value) {
-            params.set("q", value);
-        } else {
-            params.delete("q");
-        }
-
         const timer = setTimeout(() => {
+            const params = new URLSearchParams(searchParams);
+            if (value) {
+                params.set("q", value);
+            } else {
+                params.delete("q");
+            }
             startTransition(() => {
                 replace(`${pathname}?${params.toString()}`);
             });
         }, 300);
 
         return () => clearTimeout(timer);
-    }, [value, pathname, replace, searchParams]);
+    }, [value]);
 
     return (
         <div className={`relative w-full max-w-sm ${className}`}>
@@ -41,7 +40,7 @@ export function SearchInput({
             <Input
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
-                className="pl-10 rounded-xl bg-muted/50 border-none focus-visible:ring-primary/20"
+                className="pl-10 rounded-xl bg-zinc-100 border-none focus-visible:ring-primary/20"
                 placeholder={placeholder}
             />
             {isPending && (
